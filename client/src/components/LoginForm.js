@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,8 @@ import { useAuth } from "../context/authContext/AuthProvider";
 
 const LoginForm = () => {
     const navigate = useNavigate();
-    const [_, dispatch] = useAuth();
+
+    const { state, dispatch } = useAuth();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 

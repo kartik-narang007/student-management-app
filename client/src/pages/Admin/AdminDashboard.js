@@ -1,43 +1,38 @@
 import React from "react";
-import AdminSidebar from "../../components/AdminSidebar";
-import AdminHeader from "../../components/AdminHeader";
-import { useAuth } from "../../context/authContext/AuthProvider";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
-    const [state, dispatch] = useAuth();
-    console.log(state);
-
     return (
-        <div className="flex h-screen">
-            <AdminSidebar />
-            <div className="flex-1 flex flex-col">
-                <AdminHeader />
-                <main className="flex-1 p-6">
-                    <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        {/* Dashboard Widgets */}
-                        <div className="bg-white p-4 shadow rounded">
-                            <h2 className="text-xl font-semibold">
-                                Total Students
-                            </h2>
-                            <p className="text-2xl font-bold">150</p>
-                        </div>
-                        <div className="bg-white p-4 shadow rounded">
-                            <h2 className="text-xl font-semibold">
-                                Total Teachers
-                            </h2>
-                            <p className="text-2xl font-bold">30</p>
-                        </div>
-                        <div className="bg-white p-4 shadow rounded">
-                            <h2 className="text-xl font-semibold">
-                                Total Classes
-                            </h2>
-                            <p className="text-2xl font-bold">12</p>
-                        </div>
+        <main className="flex-1 rounded-lg"> {/* mt-16 for space below the header */}
+            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {/* Dashboard Widgets */}
+                <Link to="/admin/students-analytics">
+                    <div className="bg-white p-4 shadow rounded hover:shadow-lg transition">
+                        <h2 className="text-xl font-semibold">Total Students</h2>
+                        <p className="text-2xl font-bold">150</p>
                     </div>
-                </main>
+                </Link>
+                <Link to="/admin/teachers-analytics">
+                    <div className="bg-white p-4 shadow rounded hover:shadow-lg transition">
+                        <h2 className="text-xl font-semibold">Total Teachers</h2>
+                        <p className="text-2xl font-bold">30</p>
+                    </div>
+                </Link>
+                <Link to="/admin/fees-salary-management">
+                    <div className="bg-white p-4 shadow rounded hover:shadow-lg transition">
+                        <h2 className="text-xl font-semibold">Fees & Salary Management</h2>
+                        <p className="text-2xl font-bold">Manage Entries</p>
+                    </div>
+                </Link>
+                <Link to="/admin/expense-analytics">
+                    <div className="bg-white p-4 shadow rounded hover:shadow-lg transition">
+                        <h2 className="text-xl font-semibold">Expense Analytics</h2>
+                        <p className="text-2xl font-bold">View Analytics</p>
+                    </div>
+                </Link>
             </div>
-        </div>
+        </main>
     );
 };
 

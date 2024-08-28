@@ -19,7 +19,6 @@ export const handleRegister = async (values, role, navigate, dispatch) => {
 
         dispatch(setUser(user, token));
         localStorage.setItem("token", token);
-        navigate(`/${user.role}`);
     } catch (err) {
         console.log(`There was an error ${err}`);
     }
