@@ -1,14 +1,17 @@
+// src/components/StudentHeader.js
 import React from 'react';
+import withNavigation from './ReusableHOCs/NavigationButtonsHOCs';
+import withLogout from './ReusableHOCs/LogoutButtonHOCs';
 
-const StudentHeader = () => {
+const StudentHeader = ({ NavigationButtons, LogoutButton }) => {
     return (
-        <header className="bg-gray-800 text-white px-4 py-3 shadow-md rounded-md">
-            <div className="flex items-center justify-between">
-                <h1 className="text-xl font-bold">Student Dashboard</h1>
-                <button className="bg-red-600 px-4 py-2 rounded-md hover:bg-red-800">Logout</button>
+        <header className="flex items-start w-full px-4 py-[1.88rem] border-b border-yellow-400 justify-between">
+            {NavigationButtons}
+            <div className="flex items-center justify-center">
+                {LogoutButton}
             </div>
         </header>
     );
 };
 
-export default StudentHeader;
+export default withLogout(withNavigation(StudentHeader));

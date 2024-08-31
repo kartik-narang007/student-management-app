@@ -2,27 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Scrollbar Styles for Chrome */
-.scrollable-table {
-    overflow-y: auto;
-  }
-  
-  /* Webkit Scrollbars */
-  .scrollable-table::-webkit-scrollbar {
-    width: 4px; /* Adjust scrollbar width to be narrower */
-  }
-  
-  .scrollable-table::-webkit-scrollbar-thumb {
-    background-color: #d1d5db; /* Scrollbar thumb color */
-    border-radius: 8px; /* Make the scrollbar thumb more rounded */
-  }
-  
-  .scrollable-table::-webkit-scrollbar-track {
-    background-color: #f3f4f6; /* Scrollbar track color */
-  }
-  
-  /* Hide scroll buttons */
-  .scrollable-table::-webkit-scrollbar-button {
-    display: none; /* Hide up and down arrows */
-  }
-  
+/* Custom Scrollbar Styles for Webkit */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+
+/* styles.css or similar */
+.action-button {
+  margin-right: 8px; /* Adjust the gap as needed */
+}
+
+.action-button:last-child {
+  margin-right: 0; /* No margin for the last button */
+}

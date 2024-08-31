@@ -1,43 +1,33 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import StudentLayout from "../Students/StudentLayout";
+import useStudentProfile from "../../hooks/useStudentProfile";
+import DashboardWidget from "../../components/ReusableHOCs/DashboardWidget";
 
 const StudentDashboard = () => {
-    const navigate = useNavigate();
+    const { student, loading, error } = useStudentProfile();
 
-    const totalFeesPaid = "$1200"; // Replace with dynamic value if needed
-
-    const handleFeeDetailsClick = () => {
-        navigate("/student/fees"); // Redirect to the fee details page
-    };
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
-        <>
-            <h1 className="text-center text-2xl font-bold">
+        <main className="flex-1 rounded-lg">
+            <h1 className="text-2xl font-bold text-center">
                 Student Dashboard
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                {/* Dashboard Widgets */}
-                <div className="bg-white p-4 shadow rounded hover:shadow-lg transition">
-                    <h2 className="text-xl font-semibold">Class Details</h2>
-                    <p>View Class and Teachers Detail.</p>
-                </div>
-                <div className="bg-white p-4 shadow rounded hover:shadow-lg transition">
-                    <h2 className="text-xl font-semibold">Grades</h2>
-                    <p>View your grades and academic performance.</p>
-                </div>
-                <div
-                    className="bg-white p-4 shadow rounded hover:shadow-lg transition cursor-pointer"
-                    onClick={handleFeeDetailsClick} // Add onClick handler
-                >
-                    <h2 className="text-xl font-semibold">Total Fees Paid</h2>
-                    <p className="text-lg font-medium text-gray-600">
-                        Amount: {totalFeesPaid}
-                    </p>{" "}
-                    {/* Display the amount */}
-                </div>
+                <DashboardWidget
+                    to="/student/class-details"
+                    bgColor="bg-blue-100"
+                    title="Class Details"
+                    content="View Class and Teachers Detail."
+                />
+                <DashboardWidget
+                    to="/student/fees"
+                    bgColor="bg-white"
+                    title="Total Fees Paid"
+                    content={`$${student?.totalFeePaid} - View Details`}
+                />
             </div>
-        </>
+        </main>
     );
 };
 

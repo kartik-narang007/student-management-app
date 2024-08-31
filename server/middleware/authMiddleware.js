@@ -1,23 +1,43 @@
-const jwt = require("jwt");
+const jwt = require("jsonwebtoken"); // Make sure to use 'jsonwebtoken' package
 const User = require("../models/User");
 
-const authenticationToken = (req, res) => {
+const authenticationToken = async (req, res, next) => {
     const token = req.headers["authorization"];
 
     if (!token) return res.sendStatus(403);
 
-    jwt.verifyToken(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
+    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+
+        try {
+            // Find the user in the database
+            const foundUser = await User.findById(user.id);
+
+            // Check if user is approved
+            if (!foundUser || !foundUser.isApproved) {
+                return res
+                    .status(403)
+                    .json({ message: "Access Denied: User not approved" });
+            }
+
+            req.user = foundUser;
+            next();
+        } catch (dbErr) {
+            return res
+                .status(500)
+                .json({ message: "Database error", error: dbErr.message });
+        }
     });
 };
 
 const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
-            return res.stats(403).json({ message: "Access Denied" });
+            return res.status(403).json({ message: "Access Denied" });
         }
+        next();
     };
 };
 

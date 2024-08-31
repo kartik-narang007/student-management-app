@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import InputField from "../../components/InputField";
 import { handleRegister } from "../../utils/apiUtils";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext/AuthProvider";
+import axios from "axios";
+import { FETCH_CLASS_NAMES } from "../../utils/api"; // Adjust the import path as needed
 
 const StudentRegister = () => {
+    const { state, dispatch } = useAuth();
     const navigate = useNavigate();
-    const [_, dispatch] = useAuth();
+
+    // State for class names and selected class
+    const [classes, setClasses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchClasses = async () => {
+            try {
+                const response = await axios.get(FETCH_CLASS_NAMES); // Adjust the URL as needed
+                setClasses(response?.data); // Adjust according to your data structure
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchClasses();
+    }, []);
+
+    useEffect(() => {
+        if (state.user) {
+            navigate(`/${state.user.role}`);
+        }
+    }, [state.user, navigate]);
 
     const validationSchema = Yup.object({
         fullName: Yup.string().required("Full name is required"),
@@ -41,6 +69,7 @@ const StudentRegister = () => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")
             .required("Confirm Password is required"),
+        class: Yup.string().required("Class ID is required"), // Validation for class ID
     });
 
     const genderOptions = [
@@ -49,6 +78,9 @@ const StudentRegister = () => {
         { value: "female", label: "Female" },
         { value: "other", label: "Other" },
     ];
+
+    if (loading) return <p>Loading classes...</p>;
+    if (error) return <p>Error loading classes: {error}</p>;
 
     return (
         <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mx-auto">
@@ -66,12 +98,16 @@ const StudentRegister = () => {
                     parentName: "",
                     password: "",
                     confirmPassword: "",
+                    class: "", // Ensure this starts empty
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    console.log(values);
-                    handleRegister(values, "student", navigate, dispatch);
-                }} //handleRegister(values, "student")
+                    const dataToSend = {
+                        ...values,
+                        class: values.class,
+                    };
+                    handleRegister(dataToSend, "student", navigate, dispatch);
+                }}
             >
                 {({ isValid, dirty }) => (
                     <Form className="space-y-4">
@@ -236,29 +272,52 @@ const StudentRegister = () => {
                                     )}
                                 </ErrorMessage>
                             </div>
+                            <div>
+                                <label
+                                    htmlFor="class"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Class
+                                </label>
+                                <Field
+                                    as="select"
+                                    id="class"
+                                    name="class"
+                                    className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                >
+                                    <option value="">Select a class</option>
+                                    {classes.map((cls) => {
+                                        return (
+                                            <option
+                                                key={cls._id}
+                                                value={cls._id}
+                                            >
+                                                {cls.name}
+                                            </option>
+                                        );
+                                    })}
+                                </Field>
+                                <ErrorMessage name="class">
+                                    {(msg) => (
+                                        <p className="mt-2 text-sm text-red-600">
+                                            {msg}
+                                        </p>
+                                    )}
+                                </ErrorMessage>
+                            </div>
                         </div>
-
-                        <button
-                            type="submit"
-                            className="w-full bg-purple-600 text-white py-2 rounded-lg shadow-md hover:bg-purple-700 transition duration-200 text-sm"
-                            disabled={!isValid || !dirty}
-                        >
-                            Register
-                        </button>
+                        <div className="text-center">
+                            <button
+                                type="submit"
+                                className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700"
+                                disabled={!(isValid && dirty)}
+                            >
+                                Register
+                            </button>
+                        </div>
                     </Form>
                 )}
             </Formik>
-            <div className="flex justify-center">
-                <p className="text-purple-600 text-md mt-3">
-                    Already a user?{" "}
-                    <span
-                        onClick={() => navigate("/login")}
-                        className="cursor-pointer underline font-semibold hover:opacity-80"
-                    >
-                        Login
-                    </span>
-                </p>
-            </div>
         </div>
     );
 };

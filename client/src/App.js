@@ -19,113 +19,148 @@ import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import StudentsAnalytics from "./pages/Admin/StudentsAnalytics";
 import TeachersAnalytics from "./pages/Admin/TeachersAnalytics";
 import ExpenseAnalytics from "./pages/Admin/ExpenseAnalytics";
-import FeesSalaryManagement from "./pages/Admin/FeeSalaryManagement";
+import SalaryPayment from "./pages/Admin/SalaryPayment";
+import FeeReceive from "./pages/Admin/FeeReceive";
 import AdminManageStudents from "./pages/Admin/AdminManageStudents";
 import AdminManageTeachers from "./pages/Admin/AdminManageTeachers";
-import AdminManageClasses from "./pages/Admin/AdminManageClasses";
-import AdminReports from "./pages/Admin/AdminReports";
-import AdminClassList from "./pages/Admin/AdminClassList";
+import AdminCreateClass from "./pages/Admin/AdminCreateClass";
+import AssignTeachers from "./pages/Admin/AssignTeachers";
 import StudentFeeDetails from "./pages/Students/StudentFeeDetails";
 import { AuthProvider } from "./context/authContext/AuthProvider";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminClassList from "./pages/Admin/AdminClassList";
+import StudentClassDetails from "./pages/Students/StudentClassDetails";
+import TeacherSalaryDetails from "./pages/Teacher/TeacherSalaryDetails";
 
 const App = () => {
     return (
-        <AuthProvider>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Main />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/admin-register" element={<AdminRegister />} />
-                    <Route
-                        path="/teacher-register"
-                        element={<TeacherRegister />}
-                    />
-                    <Route
-                        path="/student-register"
-                        element={<StudentRegister />}
-                    />
-                    <Route
-                        path="/forgot-password"
-                        element={<ForgotPassword />}
-                    />
-                    <Route
-                        path="/reset-password/:token"
-                        element={<ResetPassword />}
-                    />
-
-                    <Route
-                        path="/admin/*"
-                        element={<ProtectedRoute allowedRoles={["admin"]} />}
-                    >
+        <div className="scrollable">
+            <AuthProvider>
+                <Router>
+                    <Routes>
+                        <Route path="/" element={<Main />} />
+                        <Route path="/login" element={<Login />} />
                         <Route
-                            element={<AdminLayout />}
-                        >
-                            <Route index element={<AdminDashboard />} />
-                            <Route
-                                path="students"
-                                element={<AdminManageStudents />}
-                            />
-                            <Route
-                                path="teachers"
-                                element={<AdminManageTeachers />}
-                            />
-                            <Route
-                                path="classes"
-                                element={<AdminManageClasses />}
-                            />
-                            <Route path="reports" element={<AdminReports />} />
-                            <Route
-                                path="fees-salary-management"
-                                element={<FeesSalaryManagement />}
-                            />
-                            <Route
-                                path="students-analytics"
-                                element={<StudentsAnalytics />}
-                            />
-                            <Route
-                                path="teachers-analytics"
-                                element={<TeachersAnalytics />}
-                            />
-                            <Route
-                                path="expense-analytics"
-                                element={<ExpenseAnalytics />}
-                            />
-                            <Route
-                                path="class-list"
-                                element={<AdminClassList />}
-                            />
-                        </Route>
-                    </Route>
-
-                    <Route
-                        path="/teacher/*"
-                        element={<ProtectedRoute allowedRoles={["teacher"]} />}
-                    >
+                            path="/admin-register"
+                            element={<AdminRegister />}
+                        />
                         <Route
-                            element={<TeacherLayout />}
-                        >
-                            <Route index element={<TeacherDashboard />} />
-                            <Route path="classes" element={<TeacherMyClasses />} />
-                            <Route path="profile" element={<TeacherProfile />} />
-                        </Route>
-                    </Route>
-
-                    <Route
-                        path="/student/*"
-                        element={<ProtectedRoute allowedRoles={["student"]} />}
-                    >
+                            path="/teacher-register"
+                            element={<TeacherRegister />}
+                        />
                         <Route
-                            element={<StudentLayout />}
+                            path="/student-register"
+                            element={<StudentRegister />}
+                        />
+                        <Route
+                            path="/forgot-password"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="/reset-password/:token"
+                            element={<ResetPassword />}
+                        />
+
+                        <Route
+                            path="/admin/*"
+                            element={
+                                <ProtectedRoute allowedRoles={["admin"]} />
+                            }
                         >
-                            <Route index element={<StudentDashboard />} />
-                            <Route path="profile" element={<StudentProfile />} />
-                            <Route path="fees" element={<StudentFeeDetails />} />
+                            <Route element={<AdminLayout />}>
+                                <Route index element={<AdminDashboard />} />
+                                <Route
+                                    path="students"
+                                    element={<AdminManageStudents />}
+                                />
+                                <Route
+                                    path="teachers"
+                                    element={<AdminManageTeachers />}
+                                />
+                                <Route
+                                    path="create-class"
+                                    element={<AdminCreateClass />}
+                                />
+                                <Route
+                                    path="salary-payment"
+                                    element={<SalaryPayment />}
+                                />
+                                <Route
+                                    path="fee-receive"
+                                    element={<FeeReceive />}
+                                />
+                                <Route
+                                    path="students-analytics"
+                                    element={<StudentsAnalytics />}
+                                />
+                                <Route
+                                    path="teachers-analytics"
+                                    element={<TeachersAnalytics />}
+                                />
+                                <Route
+                                    path="expense-analytics"
+                                    element={<ExpenseAnalytics />}
+                                />
+                                <Route
+                                    path="assign-teachers"
+                                    element={<AssignTeachers />}
+                                />
+                                <Route
+                                    path="class-list"
+                                    element={<AdminClassList />}
+                                />
+                            </Route>
                         </Route>
-                    </Route>
-                </Routes>
-            </Router>
-        </AuthProvider>
+
+                        <Route
+                            path="/teacher/*"
+                            element={
+                                <ProtectedRoute allowedRoles={["teacher"]} />
+                            }
+                        >
+                            <Route element={<TeacherLayout />}>
+                                <Route index element={<TeacherDashboard />} />
+                                <Route
+                                    path="classes"
+                                    element={<TeacherMyClasses />}
+                                />
+                                 <Route
+                                    path="salary-details"
+                                    element={<TeacherSalaryDetails />}
+                                />
+                                <Route
+                                    path="profile"
+                                    element={<TeacherProfile />}
+                                />
+                            </Route>
+                        </Route>
+
+                        <Route
+                            path="/student/*"
+                            element={
+                                <ProtectedRoute allowedRoles={["student"]} />
+                            }
+                        >
+                            <Route element={<StudentLayout />}>
+                                <Route index element={<StudentDashboard />} />
+                                <Route
+                                    path="profile"
+                                    element={<StudentProfile />}
+                                />
+                                <Route
+                                    path="fees"
+                                    element={<StudentFeeDetails />}
+                                />
+                                <Route
+                                    path="class-details"
+                                    element={<StudentClassDetails />}
+                                />
+                            </Route>
+                        </Route>
+                    </Routes>
+                </Router>
+            </AuthProvider>
+        </div>
     );
 };
 

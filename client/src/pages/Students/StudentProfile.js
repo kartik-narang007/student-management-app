@@ -1,84 +1,195 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import useStudentProfile from "../../hooks/useStudentProfile"; // Adjust the path as necessary
+import { FaUserCircle } from "react-icons/fa";
 
 const StudentProfile = () => {
-    // Sample profile data
-    const [profile, setProfile] = useState({
-        name: 'John Doe',
-        email: 'john@example.com',
-        bio: 'A diligent student pursuing excellence in academics and extracurricular activities.',
+    const { student, loading, error, updateStudent } = useStudentProfile();
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({
+        fullName: student?.fullName || "",
+        gender: student?.gender || "",
+        parentName: student?.parentName || "",
     });
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [formData, setFormData] = useState({ ...profile });
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-full text-gray-500">
+                Loading...
+            </div>
+        );
+    }
 
-    const handleChange = (e) => {
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-full text-red-500">
+                {error}
+            </div>
+        );
+    }
+
+    if (!student) {
+        return (
+            <div className="flex items-center justify-center h-full text-gray-500">
+                No student data found
+            </div>
+        );
+    }
+
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
-    const handleSave = () => {
-        setProfile({ ...formData });
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancelClick = () => {
+        setIsEditing(false);
+        setFormData({
+            fullName: student.fullName,
+            gender: student.gender,
+            parentName: student.parentName,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        updateStudent(formData); // Function to update student details
         setIsEditing(false);
     };
 
     return (
-        <div className="p-6 max-w-3xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Profile</h1>
-            <div className="bg-white p-6 shadow rounded-lg">
-                <div className="mb-4">
+        <div className="relative max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+            {isEditing && (
+                <div className="absolute top-4 right-4 flex gap-4">
+                    <button
+                        onClick={handleCancelClick}
+                        className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleSubmit}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                    >
+                        Save
+                    </button>
+                </div>
+            )}
+            {!isEditing && (
+                <button
+                    onClick={handleEditClick}
+                    className="absolute top-4 right-4 px-4 py-2 bg-green-500 text-white rounded-md"
+                >
+                    Edit
+                </button>
+            )}
+            <div className="flex items-center gap-4 mb-6">
+                <FaUserCircle size={60} className="text-yellow-500" />
+                <h2 className="text-3xl font-bold text-gray-800">
+                    Student Profile
+                </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label className="text-gray-600 font-semibold">Full Name:</label>
                     {isEditing ? (
                         <input
                             type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="block w-full mb-2 p-2 border border-gray-300 rounded"
-                            placeholder="Name"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleInputChange}
+                            className="text-lg text-gray-900 mt-2 p-2 border border-gray-300 rounded"
                         />
                     ) : (
-                        <h2 className="text-xl font-semibold">{profile.name}</h2>
-                    )}
-                    {isEditing ? (
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="block w-full mb-2 p-2 border border-gray-300 rounded"
-                            placeholder="Email"
-                        />
-                    ) : (
-                        <p className="text-gray-600">{profile.email}</p>
+                        <p className="text-lg text-gray-900 mt-2">
+                            {student.fullName}
+                        </p>
                     )}
                 </div>
-                {isEditing ? (
-                    <textarea
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleChange}
-                        rows="4"
-                        className="block w-full mb-4 p-2 border border-gray-300 rounded"
-                        placeholder="Bio"
-                    />
-                ) : (
-                    <p className="text-gray-600">{profile.bio}</p>
-                )}
-                <div className="flex justify-end">
+                <div>
+                    <label className="text-gray-600 font-semibold">Email:</label>
+                    <p className="text-lg text-gray-900 mt-2">
+                        {student.email}
+                    </p>
+                </div>
+                <div>
+                    <label className="text-gray-600 font-semibold">Mobile Number:</label>
+                    <p className="text-lg text-gray-900 mt-2">
+                        {student.mobileNumber}
+                    </p>
+                </div>
+                <div>
+                    <label className="text-gray-600 font-semibold">Date of Birth:</label>
+                    <p className="text-lg text-gray-900 mt-2">
+                        {student.dateOfBirth}
+                    </p>
+                </div>
+                <div>
+                    <label className="text-gray-600 font-semibold">Gender:</label>
                     {isEditing ? (
-                        <button
-                            onClick={handleSave}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                        <select
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleInputChange}
+                            className="text-lg text-gray-900 mt-2 p-2 border border-gray-300 rounded"
                         >
-                            Save
-                        </button>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
                     ) : (
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-                        >
-                            Edit Profile
-                        </button>
+                        <p className="text-lg text-gray-900 mt-2">
+                            {student.gender}
+                        </p>
                     )}
+                </div>
+                <div>
+                    <label className="text-gray-600 font-semibold">Parent Name:</label>
+                    {isEditing ? (
+                        <input
+                            type="text"
+                            name="parentName"
+                            value={formData.parentName}
+                            onChange={handleInputChange}
+                            className="text-lg text-gray-900 mt-2 p-2 border border-gray-300 rounded"
+                        />
+                    ) : (
+                        <p className="text-lg text-gray-900 mt-2">
+                            {student.parentName}
+                        </p>
+                    )}
+                </div>
+                <div>
+                    <label className="text-gray-600 font-semibold">Total Fee Paid:</label>
+                    <p className="text-lg text-gray-900 mt-2">
+                        {student.totalFeePaid}
+                    </p>
+                </div>
+                <div>
+                    <label className="text-gray-600 font-semibold">Classes:</label>
+                    <ul className="mt-2 text-lg text-gray-900">
+                        {student.classes.length > 0 ? (
+                            student.classes.map((classItem) => (
+                                <li
+                                    key={classItem._id}
+                                    className="bg-yellow-100 px-3 py-2 rounded-md mb-2"
+                                >
+                                    {classItem.name}
+                                </li>
+                            ))
+                        ) : (
+                            <li className="text-gray-500">
+                                No classes enrolled
+                            </li>
+                        )}
+                    </ul>
                 </div>
             </div>
         </div>

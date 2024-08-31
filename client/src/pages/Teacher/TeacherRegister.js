@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import InputField from "../../components/InputField";
@@ -7,8 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext/AuthProvider";
 
 const TeacherRegister = () => {
+    const { state, dispatch } = useAuth();
     const navigate = useNavigate();
-    const [_, dispatch] = useAuth();
+
+    useEffect(() => {
+        if (state.user) {
+            navigate(`/${state.user.role}`);
+        }
+    }, [state.user]);
 
     const validationSchema = Yup.object({
         fullName: Yup.string().required("Full name is required"),

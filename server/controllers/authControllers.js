@@ -3,55 +3,82 @@ const Teacher = require("../models/Teacher");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const JWT_SECRET = process.env.JWT_SECRET;
-const crypto = require('crypto');
+const crypto = require("crypto");
+const Class = require("../models/Class");
 
-console.log(JWT_SECRET);
+function capitalizeWords(str) {
+    if (!str) return "";
+    return str
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+}
 
 exports.userRegister = async (req, res) => {
-    console.log(req.body);
     try {
-        const { fullName, email, password, mobileNumber, role, address } =
-            req.body;
+        const {
+            fullName,
+            email,
+            password,
+            mobileNumber,
+            role,
+            address,
+            class: classId,
+        } = req.body;
+
+
+        // Capitalize necessary fields
+        const capitalizedFullName = capitalizeWords(fullName);
+        const capitalizedAddress = capitalizeWords(address);
+
         let user;
+
         switch (role) {
             case "admin": {
                 user = new User({
-                    fullName,
+                    fullName: capitalizedFullName,
                     email,
                     password,
                     mobileNumber,
                     role,
-                    address,
+                    address: capitalizedAddress,
                 });
                 break;
             }
             case "student": {
-                const { date, gender, parentName } = req.body;
+                const { dob, gender, parentName } = req.body;
+                if (!dob || !gender || !parentName) {
+                    return res.status(400).json({ message: "Missing student-specific fields" });
+                }
                 user = new Student({
-                    fullName,
+                    fullName: capitalizedFullName,
                     email,
                     password,
                     mobileNumber,
                     role,
-                    address,
-                    dateOfBirth: date,
-                    gender,
-                    parentName,
+                    address: capitalizedAddress,
+                    dateOfBirth: dob,
+                    gender: capitalizeWords(gender),
+                    parentName: capitalizeWords(parentName),
                 });
                 break;
             }
             case "teacher": {
-                const { date, gender } = req.body;
+                const { dob, gender } = req.body;
+                if (!dob || !gender) {
+                    return res.status(400).json({ message: "Missing teacher-specific fields" });
+                }
                 user = new Teacher({
-                    fullName,
+                    fullName: capitalizedFullName,
                     email,
                     password,
                     mobileNumber,
                     role,
-                    address,
-                    dateOfBirth: date,
+                    address: capitalizedAddress,
+                    gender: capitalizeWords(gender),
+                    dateOfBirth: dob,
                 });
                 break;
             }
@@ -59,9 +86,30 @@ exports.userRegister = async (req, res) => {
                 return res.status(400).json({ message: "Invalid role" });
         }
 
+        // Save the user
         const savedUser = await user.save();
-        const token = await jwt.sign(
-            { id: savedUser._id, role: user.role },
+
+        // If the role is 'student' and classId is provided, update the class
+        if (role === "student" && classId) {
+            const classToUpdate = await Class.findById(classId);
+            if (!classToUpdate) {
+                return res.status(404).json({ message: "Class not found" });
+            }
+
+            // Update the class with the student ID
+            classToUpdate.students.push(savedUser._id);
+            await classToUpdate.save();
+
+            // Update the student with the class ID and name
+            const classInfo = {
+                classId: classToUpdate._id,
+            };
+            savedUser.classes = [classToUpdate._id]; // Ensure 'classes' is properly defined in Student schema
+            await savedUser.save();
+        }
+
+        const token = jwt.sign(
+            { id: savedUser._id, role: savedUser.role },
             JWT_SECRET,
             { expiresIn: "1h" }
         );
@@ -72,7 +120,7 @@ exports.userRegister = async (req, res) => {
             message: "User Created Successfully",
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({ message: err.message });
     }
 };
@@ -86,10 +134,15 @@ exports.userLogin = async (req, res) => {
             return res.status(400).json({ message: "User not found" });
         }
 
+        if (!user.isApproved) {
+            // Check if user is approved
+            return res.status(403).json({ message: "Account not approved" });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ message: "Invalid password" });
         }
 
         const token = await jwt.sign(
@@ -107,13 +160,12 @@ exports.userLogin = async (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: "server error" });
+        res.status(500).json({ message: "Server error" });
     }
 };
 
-
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    service: "Gmail",
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -128,7 +180,12 @@ exports.forgotPassword = async (req, res) => {
         return res.status(400).json({ message: "User not found" });
     }
 
-    const resetToken = crypto.randomBytes(20).toString('hex');
+    if (!user.isApproved) {
+        // Check if user is approved
+        return res.status(403).json({ message: "Account not approved" });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
     user.resetToken = resetToken;
     user.resetTokenExpiry = Date.now() + 600000; // 10 minutes
     await user.save();
@@ -139,7 +196,7 @@ exports.forgotPassword = async (req, res) => {
     await transporter.sendMail({
         to: user.email,
         from: process.env.EMAIL_USER,
-        subject: 'Password Reset Request',
+        subject: "Password Reset Request",
         text: `You requested a password reset. Click the link to reset your password: ${resetUrl}`,
     });
 
@@ -157,6 +214,11 @@ exports.resetPassword = async (req, res) => {
 
     if (!user) {
         return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    if (!user.isApproved) {
+        // Check if user is approved
+        return res.status(403).json({ message: "Account not approved" });
     }
 
     user.password = password;

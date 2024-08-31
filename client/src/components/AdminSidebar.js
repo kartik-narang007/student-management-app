@@ -1,33 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+// src/components/AdminSidebar.js
+import React from "react";
+import withSidebarNav from "./ReusableHOCs/withSidebarNav";
+import withSidebarTitle from "./ReusableHOCs/withSideBarTitle";
+import {
+    FaTachometerAlt,
+    FaUser,
+    FaChalkboardTeacher,
+    FaBookOpen,
+    FaClipboardList,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const AdminSidebar = () => {
+const AdminSidebarContent = ({ navItems }) => {
     return (
-        <div className="fixed w-64 bg-gray-800 text-white h-full flex flex-col rounded-md">
-            <div className="flex items-center justify-center py-4 border-b border-gray-700">
-                <h2 className="text-xl font-bold">Admin Panel</h2>
-            </div>
-            <nav className="flex-1 mt-4">
-                <ul>
-                    <li>
-                        <Link to="/admin" className="block px-4 py-2 hover:bg-gray-700">Dashboard</Link>
+        <nav className="bg-transparent h-full w-full mt-12">
+            <ul className="">
+                {navItems.map((item) => (
+                    <li key={item.to}>
+                        <Link
+                            to={item.to}
+                            className={`py-3 transition-colors flex items-center ${
+                                item.active
+                                    ? "border-l-4 border-yellow-500 bg-gray-100 bg-opacity-10 transition"
+                                    : "hover:bg-gray-100 hover:bg-opacity-10 hover:text-opacity-95 transition"
+                            }`}
+                        >
+                            {item.icon}
+                            <span>{item.label}</span>
+                        </Link>
                     </li>
-                    <li>
-                        <Link to="/admin/students" className="block px-4 py-2 hover:bg-gray-700">Manage Students</Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/teachers" className="block px-4 py-2 hover:bg-gray-700">Manage Teachers</Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/classes" className="block px-4 py-2 hover:bg-gray-700">Manage Classes</Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/class-list" className="block px-4 py-2 hover:bg-gray-700">Class List</Link>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+                ))}
+            </ul>
+        </nav>
     );
 };
+
+const navItems = [
+    { to: "/admin", label: "Dashboard", icon: <FaTachometerAlt className="text-lg ml-10 mr-3" /> },
+    { to: "/admin/students", label: "Manage Students", icon: <FaUser className="text-lg ml-10 mr-3" /> },
+    { to: "/admin/teachers", label: "Manage Teachers", icon: <FaChalkboardTeacher className="text-lg ml-10 mr-3" /> },
+    { to: "/admin/create-class", label: "Create Class", icon: <FaBookOpen className="text-lg ml-10 mr-3" /> },
+    { to: "/admin/class-list", label: "Class List", icon: <FaClipboardList className="text-lg ml-10 mr-3" /> },
+    { to: "/admin/assign-teachers", label: "Assign Teachers", icon: <FaClipboardList className="text-lg ml-10 mr-3" /> },
+];
+
+const AdminSidebar = withSidebarTitle(withSidebarNav(AdminSidebarContent, navItems), "Admin Dashboard");
 
 export default AdminSidebar;

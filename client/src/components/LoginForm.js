@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { handleLogin } from "../utils/apiUtils";
 import { useAuth } from "../context/authContext/AuthProvider";
 
-const LoginForm = () => {
+const LoginForm = ({ errorMessage, setErrorMessage }) => {
     const navigate = useNavigate();
+    const { dispatch } = useAuth();
 
-    const { state, dispatch } = useAuth();
-
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     // Define validation schema using Yup
     const validationSchema = Yup.object({
@@ -25,11 +24,14 @@ const LoginForm = () => {
             <h2 className="text-xl font-bold mb-3 text-center text-purple-600">
                 Login
             </h2>
+            {errorMessage && (
+                <p className="text-red-600 mb-4 text-center">{errorMessage}</p>
+            )}
             <Formik
                 initialValues={{ email: "", password: "" }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    handleLogin(values, setIsSubmitting, navigate, dispatch);
+                    handleLogin(values, setIsSubmitting, navigate, dispatch, setErrorMessage);
                 }}
             >
                 <Form className="space-y-3">

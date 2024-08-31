@@ -1,37 +1,32 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-// Dummy data
-const dummyTeachers = [
-    {
-        name: "Mr. Anderson",
-        class: "10A",
-        totalSalaryPaid: "$5000",
-        gender: "Male",
-    },
-    {
-        name: "Ms. Brown",
-        class: "10B",
-        totalSalaryPaid: "$4500",
-        gender: "Female",
-    },
-    {
-        name: "Dr. Clark",
-        class: "10A",
-        totalSalaryPaid: "$5500",
-        gender: "Male",
-    },
-    {
-        name: "Dr. Clark",
-        class: "10A",
-        totalSalaryPaid: "$5500",
-        gender: "Male",
-    },
-    // Add more dummy data as needed
-];
+import useTeacherAnalytics from "../../hooks/useTeacherAnalytics";
+import Table from "../../components/ReusableTable";
+import { useNavigate } from "react-router-dom";
 
 const TeachersAnalytics = () => {
     const navigate = useNavigate();
+    const { teachers, loading, error } = useTeacherAnalytics();
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+    // Headers for the Table
+    const headers = [
+        { title: 'Name', key: 'name', sortable: true },
+        { title: 'Number of Classes', key: 'numberOfClasses', sortable: true },
+        { title: 'Total Salary Paid', key: 'totalSalaryPaid', sortable: true },
+        { title: 'Gender', key: 'gender', sortable: false }
+    ];
+
+    // onRowClick function for navigation to teacher profile
+    const handleRowClick = (id) => {
+        navigate(`/teacher/profile/${id}`);
+    };
 
     return (
         <div className="flex flex-col p-6 h-screen relative">
@@ -62,41 +57,14 @@ const TeachersAnalytics = () => {
                 <h1 className="text-2xl font-bold mb-2">Teachers Analytics</h1>
             </div>
 
-            <div className="flex flex-1 overflow-hidden">
-                {/* Table Section */}
-                <div className="flex-1 overflow-hidden">
-                    <div className="scrollable-table overflow-auto h-[calc(100vh-160px)]">
-                        {/* Ensure table height is calculated to fit remaining space */}
-                        <table className="min-w-full bg-white border border-gray-300 divide-y divide-gray-200">
-                            <thead className="bg-gray-200 sticky top-0">
-                                <tr>
-                                    <th className="py-2 px-4 border-r">Name</th>
-                                    <th className="py-2 px-4 border-r">Class</th>
-                                    <th className="py-2 px-4 border-r">Total Salary Paid</th>
-                                    <th className="py-2 px-4">Gender</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dummyTeachers.map((teacher, index) => (
-                                    <tr
-                                        key={index}
-                                        className={
-                                            index % 2 === 0
-                                                ? "bg-gray-50"
-                                                : "bg-gray-100"
-                                        }
-                                    >
-                                        <td className="py-2 px-4 border-r">{teacher.name}</td>
-                                        <td className="py-2 px-4 border-r">{teacher.class}</td>
-                                        <td className="py-2 px-4 border-r">{teacher.totalSalaryPaid}</td>
-                                        <td className="py-2 px-4">{teacher.gender}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            {/* Reusable Table Component */}
+            <Table 
+                headers={headers} 
+                rows={teachers} 
+                rowKey="id"
+                onRowClick={handleRowClick}
+                sortable
+            />
         </div>
     );
 };

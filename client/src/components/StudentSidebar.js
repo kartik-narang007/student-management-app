@@ -1,24 +1,39 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+// src/components/StudentSidebar.js
+import React from "react";
+import withSidebarNav from "./ReusableHOCs/withSidebarNav";
+import withSidebarTitle from "./ReusableHOCs/withSideBarTitle";
+import { FaTachometerAlt, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const StudentSidebar = () => {
+const StudentSidebarContent = ({ navItems }) => {
     return (
-        <div className="fixed w-64 bg-gray-800 text-white h-full flex flex-col rounded-md">
-            <div className="flex items-center justify-center py-4 border-b border-gray-700">
-                <h2 className="text-xl font-bold">Student Panel</h2>
-            </div>
-            <nav className="flex-1 mt-4">
-                <ul>
-                    <li>
-                        <Link to="/student" className="block px-4 py-2 hover:bg-gray-700">Dashboard</Link>
+        <nav className="bg-transparent h-full w-full mt-12">
+            <ul className="">
+                {navItems.map((item) => (
+                    <li key={item.to}>
+                        <Link
+                            to={item.to}
+                            className={`py-3 transition-colors flex items-center ${
+                                item.active
+                                    ? "border-l-4 border-yellow-500 bg-gray-100 bg-opacity-10 transition"
+                                    : "hover:bg-gray-100 hover:bg-opacity-10 hover:text-opacity-95 transition"
+                            }`}
+                        >
+                            {item.icon}
+                            <span>{item.label}</span>
+                        </Link>
                     </li>
-                    <li>
-                        <Link to="/student/profile" className="block px-4 py-2 hover:bg-gray-700">Profile</Link>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+                ))}
+            </ul>
+        </nav>
     );
 };
+
+const navItems = [
+    { to: "/student", label: "Dashboard", icon: <FaTachometerAlt className="text-lg ml-10 mr-3" /> },
+    { to: "/student/profile", label: "Profile", icon: <FaUser className="text-lg ml-10 mr-3" /> },
+];
+
+const StudentSidebar = withSidebarTitle(withSidebarNav(StudentSidebarContent, navItems), "Student Dashboard");
 
 export default StudentSidebar;
