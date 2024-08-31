@@ -156,7 +156,7 @@ const ExpenseAnalytics = () => {
                     <option value="yearly">Yearly</option>
                 </select>
             </div>
-            <div style={{ width: "70%", margin: "auto" }}>
+            <div style={{ width: "60%", margin: "auto" }}>
                 <Line data={chartData} options={chartOptions} />
             </div>
         </div>

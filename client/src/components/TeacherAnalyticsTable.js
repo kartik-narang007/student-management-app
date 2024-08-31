@@ -1,4 +1,3 @@
-// src/components/TeacherAnalyticsTable.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "../../components/ReusableTable";

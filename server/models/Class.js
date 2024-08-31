@@ -9,6 +9,6 @@ const classSchema = new mongoose.Schema({
     teachers: [{ type: mongoose.Schema.Types.ObjectId, ref: "teacher" }],
 });
 
-// Ensure "Class" model is registered
+
 const Class = mongoose.model("Class", classSchema);
 module.exports = Class;

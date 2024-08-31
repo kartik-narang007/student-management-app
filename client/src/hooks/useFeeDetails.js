@@ -9,7 +9,6 @@ const useFeeDetails = (studentId, token) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log(studentId);
         const fetchFeeDetails = async () => {
             try {
                 setLoading(true);
@@ -23,7 +22,6 @@ const useFeeDetails = (studentId, token) => {
                 );
                 setFeeDetails(response.data);
 
-                // Calculate the total fees paid
                 const total = response.data.reduce(
                     (sum, fee) => sum + fee.amount,
                     0
@@ -37,7 +35,7 @@ const useFeeDetails = (studentId, token) => {
         };
 
         fetchFeeDetails();
-    }, [studentId]);
+    }, [studentId, token]);
 
     return { feeDetails, totalFeesPaid, loading, error };
 };

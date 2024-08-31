@@ -1,8 +1,7 @@
-// src/components/StudentSidebar.js
 import React from "react";
 import withSidebarNav from "./ReusableHOCs/withSidebarNav";
 import withSidebarTitle from "./ReusableHOCs/withSideBarTitle";
-import { FaTachometerAlt, FaUser } from "react-icons/fa";
+import { FaTachometerAlt, FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const StudentSidebarContent = ({ navItems }) => {
@@ -31,7 +30,7 @@ const StudentSidebarContent = ({ navItems }) => {
 
 const navItems = [
     { to: "/student", label: "Dashboard", icon: <FaTachometerAlt className="text-lg ml-10 mr-3" /> },
-    { to: "/student/profile", label: "Profile", icon: <FaUser className="text-lg ml-10 mr-3" /> },
+    { to: "/student/profile", label: "Profile", icon: <FaUserCircle className="text-lg ml-10 mr-3" /> },
 ];
 
 const StudentSidebar = withSidebarTitle(withSidebarNav(StudentSidebarContent, navItems), "Student Dashboard");

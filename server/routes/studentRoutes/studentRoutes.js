@@ -4,13 +4,11 @@ const {
     authenticationToken,
     authorizeRoles,
 } = require("../../middleware/authMiddleware");
-const Student = require("../../models/Student");
-const Teacher = require("../../models/Teacher");
 const {
     getStudentClassDetails, getFeeDetails, getStudentProfile, updateStudentProfile,
 } = require("../../controllers/studentControllers");
 
-// Apply authentication middleware
+
 router.use(authenticationToken);
 router.use(authorizeRoles("student"));
 

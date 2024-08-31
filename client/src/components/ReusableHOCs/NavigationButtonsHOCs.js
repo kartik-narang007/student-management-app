@@ -1,4 +1,3 @@
-// src/components/ReusableHOCs/withNavigation.js
 import React from "react";
 import {
     MdOutlineKeyboardArrowLeft,

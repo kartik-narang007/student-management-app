@@ -15,7 +15,7 @@ const SalaryPaymentPage = () => {
             if (teacher) {
                 setFormData((prevData) => ({
                     ...prevData,
-                    amount: teacher.assignedSalary || 0, // Set amount to assignedSalary
+                    amount: teacher.assignedSalary || 0, 
                 }));
             }
         }

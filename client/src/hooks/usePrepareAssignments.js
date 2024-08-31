@@ -5,10 +5,9 @@ import useFetchTeachers from "./useFetchTeachers";
 const usePrepareAssignments = () => {
   const { classes, loading: loadingClasses, error: classesError } = useFetchClasses();
   const { teachers, loading: loadingTeachers, error: teachersError } = useFetchTeachers();
- 
 
   const [classTeacherMap, setClassTeacherMap] = useState({});
-  const [classNameMap, setClassNameMap] = useState({});  // Define classNameMap state
+  const [classNameMap, setClassNameMap] = useState({});
   const [teacherAssignments, setTeacherAssignments] = useState({});
   const [error, setError] = useState("");
 
@@ -20,10 +19,10 @@ const usePrepareAssignments = () => {
       }, {});
 
       const updatedClassTeacherMap = {};
-      const updatedClassNameMap = {};  // Define updatedClassNameMap
+      const updatedClassNameMap = {};
 
       classes.forEach((classItem) => {
-        updatedClassNameMap[classItem._id] = classItem.name;  // Store class name
+        updatedClassNameMap[classItem._id] = classItem.name;
 
         updatedClassTeacherMap[classItem._id] = classItem.teachers.map(teacherId => ({
           id: teacherId,
@@ -37,7 +36,7 @@ const usePrepareAssignments = () => {
       }, {});
 
       setClassTeacherMap(updatedClassTeacherMap);
-      setClassNameMap(updatedClassNameMap);  // Set the class name map
+      setClassNameMap(updatedClassNameMap);
       setTeacherAssignments(updatedTeacherAssignments);
     }
   }, [classes, teachers]);
@@ -45,7 +44,7 @@ const usePrepareAssignments = () => {
   return {
     classTeacherMap,
     classNameMap,
-    setClassNameMap,  // Return the class name map
+    setClassNameMap,
     teacherAssignments,
     error,
     loading: loadingClasses || loadingTeachers,

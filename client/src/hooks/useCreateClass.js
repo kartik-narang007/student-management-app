@@ -4,7 +4,7 @@ import { CREATE_CLASS } from "../utils/adminApis";
 import { useAuth } from "../context/authContext/AuthProvider";
 
 const useCreateClass = () => {
-    const { state, dispatch } = useAuth();
+    const { state } = useAuth();
     const [statusMessage, setStatusMessage] = useState("");
     const [isError, setIsError] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);

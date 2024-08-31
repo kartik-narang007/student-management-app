@@ -18,7 +18,6 @@ const useFetchClassDetails = (studentId) => {
                     headers: { Authorization: `${state?.token}` },
                 }
             );
-            console.log(response);
             setClassDetails(response?.data);
             setLoading(false);
         } catch (err) {

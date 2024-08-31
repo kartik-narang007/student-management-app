@@ -10,7 +10,7 @@ const InputField = ({
     error,
     as = "input",
     options = [],
-    ...props // Spread props to handle other attributes like value, onChange, onBlur
+    ...props
 }) => (
     <div className="mb-4">
         <label htmlFor={id} className="block text-sm font-medium text-gray-700">

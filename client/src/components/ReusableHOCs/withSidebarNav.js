@@ -1,6 +1,5 @@
-// src/components/ReusableHOCs/withSidebarNav.js
 import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const withSidebarNav = (WrappedComponent, navItems) => (props) => {
     const { pathname } = useLocation();

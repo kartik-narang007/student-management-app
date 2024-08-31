@@ -16,11 +16,9 @@ const useDeleteClass = () => {
                 headers: {
                     Authorization: `${state?.token}`,
                 },
-            }); // Adjust the API endpoint as needed
+            });
         } catch (err) {
-            setError(
-                err.message || "An error occurred while deleting the class."
-            );
+            setError(err.message || "An error occurred while deleting the class.");
         } finally {
             setLoading(false);
         }

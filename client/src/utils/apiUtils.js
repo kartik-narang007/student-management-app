@@ -13,7 +13,6 @@ export const handleRegister = async (values, role, navigate, dispatch) => {
                 },
             }
         );
-        console.log(response.data);
 
         const { user, token } = response.data;
 
@@ -21,7 +20,7 @@ export const handleRegister = async (values, role, navigate, dispatch) => {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
     } catch (err) {
-        console.log(`There was an error ${err}`);
+        // Handle the error appropriately here
     }
 };
 
@@ -39,7 +38,6 @@ export const handleLogin = async (
                 "Content-Type": "application/json",
             },
         });
-        console.log(response.data);
 
         const { user, token } = response.data;
 
@@ -50,7 +48,7 @@ export const handleLogin = async (
     } catch (err) {
         setIsSubmitting(false);
         if (err.response && err.response.data) {
-            setErrorMessage(err.response.data.message); // Set error message from API response
+            setErrorMessage(err.response.data.message);
         } else {
             setErrorMessage("An unexpected error occurred");
         }

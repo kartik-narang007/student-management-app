@@ -1,5 +1,3 @@
-// src/hooks/useTeacherClasses.js
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { GET_TEACHER_CLASSES } from "../utils/teacherApis";
@@ -20,18 +18,16 @@ const useTeacherClasses = (teacherId, token) => {
                         },
                     }
                 );
-                console.log(response.data.classes);
                 setClasses(response.data.classes);
-                console.log(classes);
-                setLoading(false);
             } catch (err) {
                 setError(err.message);
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchClasses();
-    }, [teacherId]);
+    }, [teacherId, token]);
 
     return { classes, loading, error };
 };

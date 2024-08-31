@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { GET_TEACHER_PROFILE, UPDATE_TEACHER_PROFILE } from "../utils/teacherApis";
 
-
 const useTeacherProfile = (teacherId, token) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -21,7 +20,7 @@ const useTeacherProfile = (teacherId, token) => {
                 );
                 setProfile(response.data.teacher);
             } catch (err) {
-                setError(err.message);
+                setError("Failed to fetch teacher profile");
             } finally {
                 setLoading(false);
             }
@@ -43,7 +42,7 @@ const useTeacherProfile = (teacherId, token) => {
             );
             setProfile(response.data.teacher);
         } catch (err) {
-            setError(err.message);
+            setError("Failed to update teacher profile");
         }
     };
 

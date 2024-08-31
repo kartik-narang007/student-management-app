@@ -6,8 +6,8 @@ const Table = ({
     onRowClick,
     rowKey,
     sortable = false,
-    renderCell, // Function to render custom cell content
-    actionButtons, // Array of arrays of action buttons
+    renderCell,
+    actionButtons,
 }) => {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
@@ -50,7 +50,7 @@ const Table = ({
                         {headers.map((header, index) => (
                             <th
                                 key={index}
-                                className="py-2 px-4 cursor-pointer text-left"
+                                className="py-2 px-4 cursor-pointer text-center"
                                 onClick={() => sortable && header.sortable && handleSort(header.key)}
                             >
                                 {header.title}
@@ -72,7 +72,7 @@ const Table = ({
                             onClick={() => onRowClick && onRowClick(row[rowKey])}
                         >
                             {headers.map((header, i) => (
-                                <td key={i} className="py-2 px-4">
+                                <td key={i} className="py-2 px-4 text-center">
                                     {renderCell ? renderCell(header.key, row) : row[header.key]}
                                 </td>
                             ))}

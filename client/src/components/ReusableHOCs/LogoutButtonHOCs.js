@@ -1,4 +1,3 @@
-// src/components/ReusableHOCs/withLogout.js
 import React from 'react';
 import { useAuth } from '../../context/authContext/AuthProvider';
 import { logoutUser } from '../../context/authContext/authActions';

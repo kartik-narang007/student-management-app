@@ -9,9 +9,11 @@ const validationSchema = Yup.object({
     year: Yup.string().required("Year is required"),
     studentLimit: Yup.number()
         .required("Student Limit is required")
-        .positive()
-        .integer(),
-    studentFees: Yup.number().required("Student Fees are required").positive(),
+        .positive("Student Limit must be a positive number")
+        .integer("Student Limit must be an integer"),
+    studentFees: Yup.number()
+        .required("Student Fees are required")
+        .positive("Student Fees must be a positive number"),
 });
 
 const AdminCreateClasses = () => {
@@ -22,7 +24,7 @@ const AdminCreateClasses = () => {
         try {
             const response = await createClass(values);
             if (response?.status === 201) {
-                setClasses([...classes, response.data.class]);
+                setClasses(prevClasses => [...prevClasses, response.data.class]);
                 resetForm();
             }
         } catch (error) {
@@ -38,9 +40,7 @@ const AdminCreateClasses = () => {
                 <h3 className="text-xl font-semibold mb-3">Add New Class</h3>
 
                 {statusMessage && (
-                    <div
-                        className={`text-${isError ? "red" : "green"}-500 mb-4`}
-                    >
+                    <div className={`text-${isError ? "red" : "green"}-500 mb-4`}>
                         {statusMessage}
                     </div>
                 )}
@@ -55,7 +55,7 @@ const AdminCreateClasses = () => {
                     validationSchema={validationSchema}
                     onSubmit={handleAddClass}
                 >
-                    {({ errors, touched }) => (
+                    {() => (
                         <Form className="space-y-3">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">

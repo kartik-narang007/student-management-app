@@ -6,5 +6,5 @@ const feeReceiveSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
 });
 
-const FeeReceive = mongoose.model("FeeReceive", feeReceiveSchema); // Register the model
+const FeeReceive = mongoose.model("FeeReceive", feeReceiveSchema); 
 module.exports = FeeReceive;

@@ -32,11 +32,14 @@ const validationSchema = Yup.object({
 
 const AdminRegister = () => {
     const navigate = useNavigate();
-    const [_, dispatch] = useAuth();
+    const { _, dispatch } = useAuth();
+
+    const buttonStyles =
+        "w-full cursor-pointer bg-purple-600 text-white py-2 rounded-lg shadow-md hover:bg-purple-700 transition duration-200 text-sm";
 
     return (
-        <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-4 mx-auto">
-            <h2 className="text-lg font-bold mb-3 text-center text-purple-600">
+        <div className="w-full max-w-md bg-gray-50 shadow-lg rounded-lg p-4 mx-auto">
+            <h2 className="text-2xl font-bold mb-3 text-center text-purple-600">
                 Admin Registration
             </h2>
             <Formik
@@ -70,9 +73,7 @@ const AdminRegister = () => {
                         />
                         <ErrorMessage name="fullName">
                             {(msg) => (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {msg}
-                                </p>
+                                <p className="mt-2 text-sm text-red-600">{msg}</p>
                             )}
                         </ErrorMessage>
 
@@ -85,9 +86,7 @@ const AdminRegister = () => {
                         />
                         <ErrorMessage name="email">
                             {(msg) => (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {msg}
-                                </p>
+                                <p className="mt-2 text-sm text-red-600">{msg}</p>
                             )}
                         </ErrorMessage>
 
@@ -100,9 +99,7 @@ const AdminRegister = () => {
                         />
                         <ErrorMessage name="mobileNumber">
                             {(msg) => (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {msg}
-                                </p>
+                                <p className="mt-2 text-sm text-red-600">{msg}</p>
                             )}
                         </ErrorMessage>
 
@@ -115,9 +112,7 @@ const AdminRegister = () => {
                         />
                         <ErrorMessage name="address">
                             {(msg) => (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {msg}
-                                </p>
+                                <p className="mt-2 text-sm text-red-600">{msg}</p>
                             )}
                         </ErrorMessage>
 
@@ -130,9 +125,7 @@ const AdminRegister = () => {
                         />
                         <ErrorMessage name="password">
                             {(msg) => (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {msg}
-                                </p>
+                                <p className="mt-2 text-sm text-red-600">{msg}</p>
                             )}
                         </ErrorMessage>
 
@@ -145,15 +138,13 @@ const AdminRegister = () => {
                         />
                         <ErrorMessage name="confirmPassword">
                             {(msg) => (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {msg}
-                                </p>
+                                <p className="mt-2 text-sm text-red-600">{msg}</p>
                             )}
                         </ErrorMessage>
 
                         <button
                             type="submit"
-                            className="w-full cursor-pointer bg-purple-600 text-white py-2 rounded-lg shadow-md hover:bg-purple-700 transition duration-200 text-sm"
+                            className={buttonStyles}
                             disabled={!isValid || !dirty}
                         >
                             Register
@@ -161,8 +152,8 @@ const AdminRegister = () => {
                     </Form>
                 )}
             </Formik>
-            <div className="flex justify-center">
-                <p className="text-purple-600 text-md mt-3">
+            <div className="flex justify-center mt-3">
+                <p className="text-purple-600 text-md">
                     Already a user?{" "}
                     <span
                         onClick={() => navigate("/login")}

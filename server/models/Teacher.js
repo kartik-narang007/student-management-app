@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./User");
 const SalaryPayment = require("./SalaryPayment");
-const Class = require("./Class"); // Import the Class model
+const Class = require("./Class"); 
 
 const teacherSchema = new mongoose.Schema({
     dateOfBirth: { type: String },

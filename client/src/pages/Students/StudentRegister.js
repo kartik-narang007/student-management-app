@@ -6,13 +6,12 @@ import { handleRegister } from "../../utils/apiUtils";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext/AuthProvider";
 import axios from "axios";
-import { FETCH_CLASS_NAMES } from "../../utils/api"; // Adjust the import path as needed
+import { FETCH_CLASS_NAMES } from "../../utils/api"; 
 
 const StudentRegister = () => {
     const { state, dispatch } = useAuth();
     const navigate = useNavigate();
 
-    // State for class names and selected class
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -20,8 +19,8 @@ const StudentRegister = () => {
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await axios.get(FETCH_CLASS_NAMES); // Adjust the URL as needed
-                setClasses(response?.data); // Adjust according to your data structure
+                const response = await axios.get(FETCH_CLASS_NAMES); 
+                setClasses(response?.data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -37,6 +36,14 @@ const StudentRegister = () => {
             navigate(`/${state.user.role}`);
         }
     }, [state.user, navigate]);
+
+    const validateClassSelection = (value) => {
+        const selectedClass = classes.find(cls => cls._id === value);
+        if (selectedClass && selectedClass.enrolledStudents >= selectedClass.studentLimit) {
+            return "This class is full.";
+        }
+        return true;
+    };
 
     const validationSchema = Yup.object({
         fullName: Yup.string().required("Full name is required"),
@@ -69,7 +76,9 @@ const StudentRegister = () => {
         confirmPassword: Yup.string()
             .oneOf([Yup.ref("password"), null], "Passwords must match")
             .required("Confirm Password is required"),
-        class: Yup.string().required("Class ID is required"), // Validation for class ID
+        class: Yup.string()
+            .required("Class ID is required")
+            .test("class-full", "This class is full", validateClassSelection),
     });
 
     const genderOptions = [
@@ -83,8 +92,8 @@ const StudentRegister = () => {
     if (error) return <p>Error loading classes: {error}</p>;
 
     return (
-        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mx-auto">
-            <h2 className="text-lg font-bold mb-3 text-center text-purple-600">
+        <div className="w-full max-w-4xl bg-gray-50 shadow-lg rounded-lg p-6 mx-auto">
+            <h2 className="text-2xl font-bold mb-3 text-center text-purple-600">
                 Student Registration
             </h2>
             <Formik
@@ -98,7 +107,7 @@ const StudentRegister = () => {
                     parentName: "",
                     password: "",
                     confirmPassword: "",
-                    class: "", // Ensure this starts empty
+                    class: "", 
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
@@ -273,30 +282,19 @@ const StudentRegister = () => {
                                 </ErrorMessage>
                             </div>
                             <div>
-                                <label
-                                    htmlFor="class"
-                                    className="block text-sm font-medium text-gray-700"
-                                >
-                                    Class
-                                </label>
-                                <Field
-                                    as="select"
+                                <InputField
+                                    label="Class"
                                     id="class"
                                     name="class"
-                                    className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                >
-                                    <option value="">Select a class</option>
-                                    {classes.map((cls) => {
-                                        return (
-                                            <option
-                                                key={cls._id}
-                                                value={cls._id}
-                                            >
-                                                {cls.name}
-                                            </option>
-                                        );
-                                    })}
-                                </Field>
+                                    as="select"
+                                    options={[
+                                        { value: "", label: "Select Class" },
+                                        ...classes.map((cls) => ({
+                                            value: cls._id,
+                                            label: `${cls.name}`,
+                                        })),
+                                    ]}
+                                />
                                 <ErrorMessage name="class">
                                     {(msg) => (
                                         <p className="mt-2 text-sm text-red-600">
@@ -306,11 +304,11 @@ const StudentRegister = () => {
                                 </ErrorMessage>
                             </div>
                         </div>
-                        <div className="text-center">
+                        <div className="text-center mt-4">
                             <button
                                 type="submit"
-                                className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700"
-                                disabled={!(isValid && dirty)}
+                                className="bg-blue-500 text-white px-4 py-2 rounded"
+                                disabled={!isValid || !dirty}
                             >
                                 Register
                             </button>

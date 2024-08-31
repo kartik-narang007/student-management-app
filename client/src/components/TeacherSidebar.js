@@ -1,8 +1,7 @@
-// src/components/TeacherSidebar.js
 import React from 'react';
 import withSidebarNav from './ReusableHOCs/withSidebarNav';
 import withSidebarTitle from './ReusableHOCs/withSideBarTitle';
-import { FaTachometerAlt, FaUser, FaBookOpen } from 'react-icons/fa';
+import { FaTachometerAlt, FaBookOpen, FaUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const TeacherSidebarContent = ({ navItems }) => {
@@ -32,7 +31,7 @@ const TeacherSidebarContent = ({ navItems }) => {
 const navItems = [
     { to: "/teacher", label: "Dashboard", icon: <FaTachometerAlt className="text-lg ml-10 mr-3" /> },
     { to: "/teacher/classes", label: "Classes", icon: <FaBookOpen className="text-lg ml-10 mr-3" /> },
-    { to: "/teacher/profile", label: "Profile", icon: <FaUser className="text-lg ml-10 mr-3" /> },
+    { to: "/teacher/profile", label: "Profile", icon: <FaUserCircle className="text-lg ml-10 mr-3" /> },
 ];
 
 const TeacherSidebar = withSidebarTitle(withSidebarNav(TeacherSidebarContent, navItems), "Teacher Dashboard");

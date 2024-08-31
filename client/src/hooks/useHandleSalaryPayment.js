@@ -9,7 +9,7 @@ const useHandleSalaryPayment = () => {
         teacher: "",
         amount: "",
         date: "",
-        assignedSalary: "", // Add assignedSalary to formData
+        assignedSalary: "",
     });
     const [successMessage, setSuccessMessage] = useState("");
 
@@ -21,7 +21,6 @@ const useHandleSalaryPayment = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Ensure the amount is a number
         const amountNumber = parseFloat(formData.amount);
 
         if (isNaN(amountNumber)) {
@@ -32,7 +31,7 @@ const useHandleSalaryPayment = () => {
         try {
             await axios.post(SALARY_PAYMENT, {
                 ...formData,
-                amount: amountNumber, // Send amount as a number
+                amount: amountNumber,
             }, {
                 headers: {
                     Authorization: `${state?.token}`,

@@ -34,34 +34,34 @@ const AdminManageStudents = () => {
         { key: "gender", title: "Gender", sortable: true },
         { key: "isApproved", title: "Approval Status", sortable: true },
     ];
+
     const getActionButtons = (row) => {
         const buttons = [];
+
         if (!row.isApproved) {
             buttons.push({
                 label: "Approve",
-                className:
-                    "bg-green-500 text-white px-3 py-1 rounded action-button",
+                className: "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600",
                 action: () => handleApproveClick(row._id),
             });
-        }
-        if (row.isApproved) {
+        } else {
             buttons.push({
                 label: "Deactivate",
-                className:
-                    "bg-red-500 text-white px-3 py-1 rounded action-button",
+                className: "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600",
                 action: () => handleDeactivateClick(row._id),
             });
         }
+
         buttons.push({
             label: "Delete",
-            className: "bg-red-600 text-white px-3 py-1 rounded action-button",
+            className: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700",
             action: () => handleDeleteClick(row._id),
         });
+
         return buttons;
     };
 
     const renderCell = (key, row) => {
-        // Customize cell rendering based on key
         if (key === "isApproved") {
             return row.isApproved ? "Approved" : "Not Approved";
         }
@@ -73,9 +73,6 @@ const AdminManageStudents = () => {
             <div className="flex justify-center items-center mb-8">
                 <h1 className="text-2xl font-bold">Manage Students</h1>
             </div>
-            {
-                console.log(students.map(getActionButtons))
-            }
             <Table
                 headers={headers}
                 rows={students}

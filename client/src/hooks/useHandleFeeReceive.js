@@ -4,7 +4,7 @@ import { FEE_RECEIVE } from "../utils/adminApis";
 import { useAuth } from "../context/authContext/AuthProvider";
 
 const useHandleFeeReceive = () => {
-    const { state, dispatch } = useAuth();
+    const { state } = useAuth();
     const [formData, setFormData] = useState({
         student: "",
         amountReceived: "",
@@ -19,7 +19,6 @@ const useHandleFeeReceive = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
         try {
             await axios.post(FEE_RECEIVE, formData, {
                 headers: {
@@ -29,9 +28,7 @@ const useHandleFeeReceive = () => {
             setSuccessMessage("Fee receipt processed successfully");
             setFormData({ student: "", amountReceived: "", receiptDate: "" });
         } catch (error) {
-            setSuccessMessage(
-                `Failed to process fee receipt: ${error.message}`
-            );
+            setSuccessMessage(`Failed to process fee receipt: ${error.message}`);
         }
     };
 

@@ -32,7 +32,6 @@ const useHandlePayment = (formType) => {
                     receiptDate: formData.receiptDate
                 });
             }
-            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} processed successfully`);
             setFormData({
                 teacherName: "",
                 amount: "",
@@ -42,7 +41,7 @@ const useHandlePayment = (formType) => {
                 receiptDate: ""
             });
         } catch (error) {
-            alert(`Failed to process ${type}: ${error.message}`);
+            console.error(`Failed to process ${type}: ${error.message}`);
         }
     };
 

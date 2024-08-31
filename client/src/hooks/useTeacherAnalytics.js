@@ -19,7 +19,7 @@ const useTeacherAnalytics = () => {
                     },
                 });
                 setTeachers(response.data);
-            } catch (err) {
+            } catch {
                 setError("Failed to fetch teacher analytics");
             } finally {
                 setLoading(false);

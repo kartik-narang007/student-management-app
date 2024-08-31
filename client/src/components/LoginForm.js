@@ -11,7 +11,6 @@ const LoginForm = ({ errorMessage, setErrorMessage }) => {
 
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    // Define validation schema using Yup
     const validationSchema = Yup.object({
         email: Yup.string().email("Invalid email address").required("Required"),
         password: Yup.string()
@@ -20,12 +19,12 @@ const LoginForm = ({ errorMessage, setErrorMessage }) => {
     });
 
     return (
-        <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-4 mx-auto">
-            <h2 className="text-xl font-bold mb-3 text-center text-purple-600">
+        <div className="w-full bg-white shadow-lg rounded-lg p-28 max-w-xl mx-auto">
+            <h2 className="text-3xl font-bold mb-6 text-center text-purple-600">
                 Login
             </h2>
             {errorMessage && (
-                <p className="text-red-600 mb-4 text-center">{errorMessage}</p>
+                <p className="text-red-600 mb-6 text-center">{errorMessage}</p>
             )}
             <Formik
                 initialValues={{ email: "", password: "" }}
@@ -35,7 +34,7 @@ const LoginForm = ({ errorMessage, setErrorMessage }) => {
                 }}
             >
                 <Form className="space-y-3">
-                    <div className="mb-4">
+                    <div className="mb-6">
                         <label
                             htmlFor="email"
                             className="block text-sm font-medium text-gray-700"
@@ -47,7 +46,7 @@ const LoginForm = ({ errorMessage, setErrorMessage }) => {
                             id="email"
                             name="email"
                             placeholder="Your email"
-                            className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                            className="mt-2 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                             disabled={isSubmitting}
                         />
                         <ErrorMessage

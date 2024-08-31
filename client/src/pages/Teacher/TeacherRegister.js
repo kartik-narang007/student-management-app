@@ -56,8 +56,8 @@ const TeacherRegister = () => {
     ];
 
     return (
-        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mx-auto">
-            <h2 className="text-lg font-bold mb-3 text-center text-purple-600">
+        <div className="w-full max-w-4xl bg-gray-50 shadow-lg rounded-lg p-6 mx-auto">
+            <h2 className="text-2xl font-bold mb-3 text-center text-purple-600">
                 Teacher Registration
             </h2>
             <Formik
@@ -73,7 +73,6 @@ const TeacherRegister = () => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    console.log(values);
                     handleRegister(values, "teacher", navigate, dispatch);
                 }}
             >

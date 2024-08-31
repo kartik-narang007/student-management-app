@@ -9,7 +9,6 @@ const MainComponent = () => {
 
     return (
         <div className="flex w-screen h-screen justify-center items-center">
-            {/* Left */}
             {!roleSelection ? (
                 <div className="w-full h-full flex flex-col justify-center items-center gap-24">
                     <div className="flex justify-center items-center flex-col">
@@ -26,17 +25,13 @@ const MainComponent = () => {
                     </div>
                     <div className="flex flex-col items-center justify-center gap-6">
                         <button
-                            onClick={() => {
-                                navigate("/login");
-                            }}
+                            onClick={() => navigate("/login")}
                             className="bg-purple-600 text-white rounded-md font-semibold py-2 px-4 hover:bg-purple-800 hover:shadow-md hover:shadow-purple-800 transition-all"
                         >
                             LOGIN
                         </button>
                         <button
-                            onClick={() => {
-                                setRoleSelection(true);
-                            }}
+                            onClick={() => setRoleSelection(true)}
                             className="bg-white text-purple-600 outline outline-1 outline-purple-600 rounded-md py-2 px-4 hover:bg-blue-50 transition-all"
                         >
                             CREATE ACCOUNT
@@ -46,9 +41,8 @@ const MainComponent = () => {
             ) : (
                 <RoleSelection setRoleSelection={setRoleSelection} />
             )}
-            {/* Right */}
             <div className="w-full h-full flex justify-center">
-                <img src={studentImage}></img>
+                <img src={studentImage} alt="Student Image" />
             </div>
         </div>
     );

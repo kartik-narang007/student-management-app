@@ -4,7 +4,7 @@ import {
     DELETE_STUDENT,
     GET_STUDENTS_AND_CLASSES,
     UPDATE_STUDENT,
-} from "../utils/adminApis"; // Ensure this matches your actual path
+} from "../utils/adminApis";
 import { useAuth } from "../context/authContext/AuthProvider";
 
 const useStudentData = () => {
@@ -22,7 +22,7 @@ const useStudentData = () => {
             setStudents(response?.data?.students);
             setClasses(response?.data?.classes);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            // Handle error silently
         }
     }, [state?.token]);
 
@@ -43,7 +43,7 @@ const useStudentData = () => {
             );
             fetchStudentsAndClasses();
         } catch (error) {
-            console.error("Error updating student:", error);
+            // Handle error silently
         }
     };
 
@@ -64,7 +64,7 @@ const useStudentData = () => {
             });
             fetchStudentsAndClasses();
         } catch (error) {
-            console.error("Error deleting student:", error);
+            // Handle error silently
         }
     };
 

@@ -31,6 +31,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminClassList from "./pages/Admin/AdminClassList";
 import StudentClassDetails from "./pages/Students/StudentClassDetails";
 import TeacherSalaryDetails from "./pages/Teacher/TeacherSalaryDetails";
+import AdminProfile from "./pages/Admin/AdminProfile";
 
 const App = () => {
     return (
@@ -108,6 +109,10 @@ const App = () => {
                                 <Route
                                     path="class-list"
                                     element={<AdminClassList />}
+                                />
+                                <Route
+                                    path="profile"
+                                    element={<AdminProfile />}
                                 />
                             </Route>
                         </Route>

@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
-const User = require("./User"); // Assuming this is the base schema
+const User = require("./User"); 
 
 const studentSchema = new mongoose.Schema({
     dateOfBirth: { type: String },
     gender: { type: String, enum: ["Male", "Female", "Other"] },
     parentName: { type: String },
-    classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }], // Reference to Class
+    classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }], 
     feeReceives: [{ type: mongoose.Schema.Types.ObjectId, ref: "FeeReceive" }],
-    totalFeePaid: { type: Number, default: 0 }, // New field to store the total fee paid
+    totalFeePaid: { type: Number, default: 0 }, 
     isApproved: { type: Boolean, default: false },
 });
 

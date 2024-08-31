@@ -8,7 +8,6 @@ const {
     getTeacherSalaryDetails, getClassDetails, getTeacherProfile, updateTeacherProfile,
 } = require("../../controllers/teacherControllers");
 
-// Apply authentication middleware
 router.use(authenticationToken);
 router.use(authorizeRoles("teacher"));
 

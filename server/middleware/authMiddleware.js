@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken"); // Make sure to use 'jsonwebtoken' package
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const authenticationToken = async (req, res, next) => {
@@ -12,10 +12,8 @@ const authenticationToken = async (req, res, next) => {
         }
 
         try {
-            // Find the user in the database
             const foundUser = await User.findById(user.id);
 
-            // Check if user is approved
             if (!foundUser || !foundUser.isApproved) {
                 return res
                     .status(403)

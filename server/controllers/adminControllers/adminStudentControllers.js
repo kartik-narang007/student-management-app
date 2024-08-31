@@ -23,22 +23,17 @@ exports.getStudentsAnalytics = async (req, res) => {
                 model: "Class",
             });
 
-        // Calculate gender distribution and fee totals
         const genderCounts = students.reduce((counts, student) => {
             counts[student.gender] = (counts[student.gender] || 0) + 1;
             return counts;
         }, {});
 
-
-        // Calculate fees received
         const response = {
             students: students.map((student) => {
                 const totalFeesReceived = student.feeReceives.reduce(
                     (total, feeReceive) => total + feeReceive.amount,
                     0
                 );
-
-                
 
                 return {
                     name: student.fullName,
@@ -48,7 +43,7 @@ exports.getStudentsAnalytics = async (req, res) => {
                         ? student?.classes[0]?.name
                         : "N/A",
                     gender: student.gender,
-                    feesReceived: totalFeesReceived, // Aggregate fees received
+                    feesReceived: totalFeesReceived,
                 };
             }),
             genderDistribution: genderCounts,
@@ -56,7 +51,6 @@ exports.getStudentsAnalytics = async (req, res) => {
 
         res.json(response);
     } catch (err) {
-        console.log(err);
         res.status(500).send({
             error: "An error occurred while fetching student analytics.",
         });
@@ -88,21 +82,17 @@ exports.updateStudent = async (req, res) => {
             return res.status(404).json({ message: "Student not found" });
         }
 
-        // Update isApproved
         student.isApproved = isApproved;
 
         const updatedStudent = await student.save();
 
         res.status(200).json(updatedStudent);
     } catch (error) {
-        console.error("Error updating student:", error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
 exports.getStudentAndClasses = async (req, res) => {
-    console.log("entered in controller");
-
     try {
         const students = await Student.find().populate({
             path: "classes",
@@ -124,7 +114,6 @@ exports.getStudentAndClasses = async (req, res) => {
 
         res.json(response);
     } catch (err) {
-        console.log(err);
         res.status(500).send({
             error: "An error occurred while fetching student and class data.",
         });

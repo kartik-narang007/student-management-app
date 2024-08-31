@@ -1,4 +1,3 @@
-// src/hooks/useAdminOverview.js
 import { useState, useEffect } from "react";
 import { OVERVIEW_DATA } from "../utils/adminApis";
 import axios from "axios";
@@ -9,7 +8,6 @@ const useAdminOverview = () => {
     const [overviewData, setOverviewData] = useState({
         totalStudents: 0,
         totalTeachers: 0,
-        // Initialize other summary data if needed
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -22,13 +20,11 @@ const useAdminOverview = () => {
                         Authorization: `${state.token}`,
                     },
                 });
-                if (!response.statusText === "ok") {
-                    console.log(response);
+                if (response.statusText !== "ok") {
                     throw new Error("Failed to fetch overview data");
                 }
                 setOverviewData(response.data);
             } catch (error) {
-                console.log(error);
                 setError(error.message);
             } finally {
                 setLoading(false);
@@ -36,7 +32,7 @@ const useAdminOverview = () => {
         };
 
         fetchOverviewData();
-    }, []);
+    }, [state.token]);
 
     return { overviewData, loading, error };
 };

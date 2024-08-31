@@ -28,8 +28,6 @@ exports.userRegister = async (req, res) => {
             class: classId,
         } = req.body;
 
-
-        // Capitalize necessary fields
         const capitalizedFullName = capitalizeWords(fullName);
         const capitalizedAddress = capitalizeWords(address);
 
@@ -86,25 +84,18 @@ exports.userRegister = async (req, res) => {
                 return res.status(400).json({ message: "Invalid role" });
         }
 
-        // Save the user
         const savedUser = await user.save();
 
-        // If the role is 'student' and classId is provided, update the class
         if (role === "student" && classId) {
             const classToUpdate = await Class.findById(classId);
             if (!classToUpdate) {
                 return res.status(404).json({ message: "Class not found" });
             }
 
-            // Update the class with the student ID
             classToUpdate.students.push(savedUser._id);
             await classToUpdate.save();
 
-            // Update the student with the class ID and name
-            const classInfo = {
-                classId: classToUpdate._id,
-            };
-            savedUser.classes = [classToUpdate._id]; // Ensure 'classes' is properly defined in Student schema
+            savedUser.classes = [classToUpdate._id];
             await savedUser.save();
         }
 
@@ -116,11 +107,10 @@ exports.userRegister = async (req, res) => {
 
         res.status(201).json({
             user: savedUser,
-            token: token,
+            token,
             message: "User Created Successfully",
         });
     } catch (err) {
-        console.error(err);
         res.status(500).json({ message: err.message });
     }
 };
@@ -135,7 +125,6 @@ exports.userLogin = async (req, res) => {
         }
 
         if (!user.isApproved) {
-            // Check if user is approved
             return res.status(403).json({ message: "Account not approved" });
         }
 
@@ -145,12 +134,10 @@ exports.userLogin = async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
         }
 
-        const token = await jwt.sign(
+        const token = jwt.sign(
             { id: user._id, role: user.role },
             JWT_SECRET,
-            {
-                expiresIn: "1h",
-            }
+            { expiresIn: "1h" }
         );
 
         res.status(200).json({
@@ -159,7 +146,6 @@ exports.userLogin = async (req, res) => {
             message: "Login Successful",
         });
     } catch (err) {
-        console.log(err);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -174,57 +160,62 @@ const transporter = nodemailer.createTransport({
 
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    try {
+        const user = await User.findOne({ email });
 
-    if (!user) {
-        return res.status(400).json({ message: "User not found" });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+
+        if (!user.isApproved) {
+            return res.status(403).json({ message: "Account not approved" });
+        }
+
+        const resetToken = crypto.randomBytes(20).toString("hex");
+        user.resetToken = resetToken;
+        user.resetTokenExpiry = Date.now() + 600000;
+        await user.save();
+
+        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+
+        await transporter.sendMail({
+            to: user.email,
+            from: process.env.EMAIL_USER,
+            subject: "Password Reset Request",
+            text: `You requested a password reset. Click the link to reset your password: ${resetUrl}`,
+        });
+
+        res.status(200).json({ message: "Password reset email sent" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
     }
-
-    if (!user.isApproved) {
-        // Check if user is approved
-        return res.status(403).json({ message: "Account not approved" });
-    }
-
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    user.resetToken = resetToken;
-    user.resetTokenExpiry = Date.now() + 600000; // 10 minutes
-    await user.save();
-
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
-
-    // Send email
-    await transporter.sendMail({
-        to: user.email,
-        from: process.env.EMAIL_USER,
-        subject: "Password Reset Request",
-        text: `You requested a password reset. Click the link to reset your password: ${resetUrl}`,
-    });
-
-    res.status(200).json({ message: "Password reset email sent" });
 };
 
 exports.resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
 
-    const user = await User.findOne({
-        resetToken: token,
-        resetTokenExpiry: { $gt: Date.now() },
-    });
+    try {
+        const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiry: { $gt: Date.now() },
+        });
 
-    if (!user) {
-        return res.status(400).json({ message: "Invalid or expired token" });
+        if (!user) {
+            return res.status(400).json({ message: "Invalid or expired token" });
+        }
+
+        if (!user.isApproved) {
+            return res.status(403).json({ message: "Account not approved" });
+        }
+
+        user.password = password;
+        user.resetToken = undefined;
+        user.resetTokenExpiry = undefined;
+        await user.save();
+
+        res.status(200).json({ message: "Password updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
     }
-
-    if (!user.isApproved) {
-        // Check if user is approved
-        return res.status(403).json({ message: "Account not approved" });
-    }
-
-    user.password = password;
-    user.resetToken = undefined;
-    user.resetTokenExpiry = undefined;
-    await user.save();
-
-    res.status(200).json({ message: "Password updated successfully" });
 };

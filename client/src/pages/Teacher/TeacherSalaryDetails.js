@@ -1,7 +1,7 @@
 import React from "react";
 import useSalaryDetails from "../../hooks/useSalaryDetails";
 import { useAuth } from "../../context/authContext/AuthProvider";
-import Table from "../../components/ReusableTable"; // Adjust the import path to your project structure
+import Table from "../../components/ReusableTable"; 
 
 const TeacherSalaryDetails = () => {
     const {
@@ -10,21 +10,18 @@ const TeacherSalaryDetails = () => {
 
     const { salaryDetails, totalSalaryPaid, loading, error } = useSalaryDetails(user._id, token);
 
-    // Define the headers for the table
     const headers = [
         { title: "Salary ID", key: "_id", sortable: true },
         { title: "Amount", key: "amount", sortable: true },
         { title: "Date", key: "date", sortable: true },
     ];
 
-    // Prepare rows and handle rendering
     const rows = salaryDetails.map((salary) => ({
         _id: salary._id,
         amount: `$${salary.amount}`,
         date: new Date(salary.date).toLocaleDateString(),
     }));
 
-    // Optional: Define action buttons if needed
     const actionButtons = [];
 
     if (loading) {

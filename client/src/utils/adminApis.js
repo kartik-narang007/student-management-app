@@ -2,6 +2,8 @@ import { API } from "./api";
 
 export const ADMIN_API = `${API}/admin`;
 export const OVERVIEW_DATA = `${ADMIN_API}/overview`;
+export const GET_ADMIN_PROFILE = `${ADMIN_API}/get-profile`;
+export const UPDATE_ADMIN_PROFILE = `${ADMIN_API}/update-profile`;
 export const STUDENT_ANALYTICS = `${ADMIN_API}/students-analytics`;
 export const TEACHER_ANALYTICS = `${ADMIN_API}/teachers-analytics`;
 export const CREATE_CLASS = `${ADMIN_API}/create-class`;
@@ -18,4 +20,4 @@ export const DELETE_TEACHER = `${ADMIN_API}/delete-teacher`;
 export const DELETE_CLASS = `${ADMIN_API}/delete-class`;
 export const GET_STUDENTS_AND_CLASSES = `${ADMIN_API}/get-students-and-classes`;
 export const BULK_ASSIGNMENTS_UPDATE = `${ADMIN_API}/bulk-assignments-update`;
-// export const GET_TEACHERS_AND_CLASSES = `${ADMIN_API}/get-teachers-and-classes`;
+

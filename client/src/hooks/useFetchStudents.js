@@ -4,8 +4,7 @@ import { FETCH_STUDENTS } from "../utils/adminApis";
 import { useAuth } from "../context/authContext/AuthProvider";
 
 const useFetchStudents = () => {
-    const { state, dispatch } = useAuth();
-
+    const { state } = useAuth();
     const [students, setStudents] = useState([]);
 
     useEffect(() => {
@@ -18,12 +17,12 @@ const useFetchStudents = () => {
                 });
                 setStudents(response.data);
             } catch (error) {
-                console.error("Error fetching students:", error);
+                
             }
         };
 
         fetchStudents();
-    }, []);
+    }, [state?.token]);
 
     return { students };
 };

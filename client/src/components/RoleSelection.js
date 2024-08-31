@@ -1,7 +1,6 @@
 import React from "react";
 import { FaCircleUser } from "react-icons/fa6";
-import { PiStudentFill } from "react-icons/pi";
-import { PiChalkboardTeacherFill } from "react-icons/pi";
+import { PiStudentFill, PiChalkboardTeacherFill } from "react-icons/pi";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 

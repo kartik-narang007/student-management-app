@@ -1,47 +1,47 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useAuth } from "../context/authContext/AuthProvider";
-import { GET_STUDENT_PROFILE, UPDATE_STUDENT_PROFILE } from "../utils/studentApis";
+import { useAuth } from "../context/authContext/AuthProvider"; // Adjust the path as necessary
+import { GET_ADMIN_PROFILE, UPDATE_ADMIN_PROFILE } from "../utils/adminApis";
 
-const useStudentProfile = () => {
+const useAdminProfile = () => {
     const { state } = useAuth();
     const { user, token } = state;
 
-    const [student, setStudent] = useState(null);
+    const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchStudentProfile = async () => {
+        const fetchAdminProfile = async () => {
             try {
                 if (user && user._id) {
                     const response = await axios.get(
-                        `${GET_STUDENT_PROFILE}/${user._id}`,
+                        `${GET_ADMIN_PROFILE}/${user._id}`,
                         {
                             headers: {
                                 Authorization: `${token}`,
                             },
                         }
                     );
-                    setStudent(response.data);
+                    setAdmin(response.data);
                 } else {
                     setError("No user ID found");
                 }
-            } catch {
-                setError("Failed to fetch student data");
+            } catch (err) {
+                setError("Failed to fetch admin data");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchStudentProfile();
+        fetchAdminProfile();
     }, [user, token]);
 
-    const updateStudent = async (updatedData) => {
+    const updateAdmin = async (updatedData) => {
         try {
             if (user && user._id) {
                 const response = await axios.put(
-                    `${UPDATE_STUDENT_PROFILE}/${user._id}`,
+                    `${UPDATE_ADMIN_PROFILE}/${user._id}`,
                     updatedData,
                     {
                         headers: {
@@ -49,16 +49,16 @@ const useStudentProfile = () => {
                         },
                     }
                 );
-                setStudent(response.data);
+                setAdmin(response.data);
             } else {
                 setError("No user ID found");
             }
-        } catch {
-            setError("Failed to update student data");
+        } catch (err) {
+            setError("Failed to update admin data");
         }
     };
 
-    return { student, loading, error, updateStudent };
+    return { admin, loading, error, updateAdmin };
 };
 
-export default useStudentProfile;
+export default useAdminProfile;

@@ -1,4 +1,3 @@
-// src/hooks/useSalaryDetails.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { GET_SALARY_DETAILS } from "../utils/teacherApis";
@@ -17,9 +16,9 @@ const useSalaryDetails = (teacherId, token) => {
                 });
                 setSalaryDetails(response.data.salaryDetails);
                 setTotalSalaryPaid(response.data.totalSalaryPaid);
-                setLoading(false);
             } catch (err) {
                 setError(err.message);
+            } finally {
                 setLoading(false);
             }
         };

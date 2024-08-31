@@ -20,7 +20,7 @@ const useTeacherData = () => {
             });
             setTeachers(response?.data);
         } catch (error) {
-            console.error("Error fetching teachers:", error);
+            // Handle the error (e.g., notify user)
         }
     }, [state?.token]);
 
@@ -41,7 +41,7 @@ const useTeacherData = () => {
             );
             fetchTeachers();
         } catch (error) {
-            console.error("Error updating teacher:", error);
+            // Handle the error (e.g., notify user)
         }
     };
 
@@ -68,7 +68,7 @@ const useTeacherData = () => {
             });
             fetchTeachers();
         } catch (error) {
-            console.error("Error deleting teacher:", error);
+            // Handle the error (e.g., notify user)
         }
     };
 

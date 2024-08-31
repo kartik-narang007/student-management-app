@@ -7,12 +7,12 @@ const useGetStudentAnalytics = () => {
     const [data, setData] = useState({ students: [], genderDistribution: {} });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {state,dispatch} = useAuth()
+    const { state } = useAuth();
 
     useEffect(() => {
         const fetchStudentAnalytics = async () => {
             try {
-                const response = await axios.get(STUDENT_ANALYTICS,{
+                const response = await axios.get(STUDENT_ANALYTICS, {
                     headers: {
                         Authorization: `${state.token}`,
                     },
@@ -26,7 +26,7 @@ const useGetStudentAnalytics = () => {
         };
 
         fetchStudentAnalytics();
-    }, []);
+    }, [state.token]);
 
     return { data, loading, error };
 };

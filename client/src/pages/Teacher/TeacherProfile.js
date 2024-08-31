@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import useTeacherProfile from "../../hooks/useTeacherProfile"; // Adjust the import path as necessary
+import useTeacherProfile from "../../hooks/useTeacherProfile";
 import { useAuth } from "../../context/authContext/AuthProvider";
 
 const TeacherProfile = () => {
@@ -11,7 +11,6 @@ const TeacherProfile = () => {
 
     const { profile, loading, error, updateProfile } = useTeacherProfile(teacherId, token);
 
-    console.log(profile);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -53,7 +52,7 @@ const TeacherProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await updateProfile(formData); // Call the updateProfile function from the hook
+            await updateProfile(formData);
             setIsEditing(false);
         } catch (err) {
             console.error("Failed to update profile:", err);

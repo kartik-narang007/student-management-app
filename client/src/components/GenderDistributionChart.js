@@ -1,4 +1,3 @@
-// src/components/GenderDistributionChart.js
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import {
@@ -11,7 +10,6 @@ import {
     Legend,
 } from "chart.js";
 
-// Register Chart.js components
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -31,17 +29,17 @@ const GenderDistributionChart = ({ maleCount, femaleCount, otherCount }) => {
                 label: "Gender Distribution",
                 data: [maleCount, femaleCount, otherCount],
                 backgroundColor: [
-                    "rgba(75, 192, 192, 0.2)", // Color for Male
-                    "rgba(153, 102, 255, 0.2)", // Color for Female
-                    "rgba(255, 159, 64, 0.2)", // Color for Other
+                    "rgba(75, 192, 192, 0.2)",
+                    "rgba(153, 102, 255, 0.2)",
+                    "rgba(255, 159, 64, 0.2)",
                 ],
                 borderColor: [
-                    "rgba(75, 192, 192, 1)", // Border color for Male
-                    "rgba(153, 102, 255, 1)", // Border color for Female
-                    "rgba(255, 159, 64, 1)", // Border color for Other
+                    "rgba(75, 192, 192, 1)",
+                    "rgba(153, 102, 255, 1)",
+                    "rgba(255, 159, 64, 1)",
                 ],
                 borderWidth: 1,
-                barThickness: 40, // Adjust the bar thickness
+                barThickness: 40,
             },
         ],
     };
@@ -54,7 +52,7 @@ const GenderDistributionChart = ({ maleCount, femaleCount, otherCount }) => {
                     responsive: true,
                     plugins: {
                         legend: {
-                            display: false, // Hide the legend inside the chart
+                            display: false,
                         },
                         tooltip: {
                             callbacks: {
@@ -86,7 +84,7 @@ const GenderDistributionChart = ({ maleCount, femaleCount, otherCount }) => {
                                 display: true,
                                 text: "Count",
                             },
-                            max: Math.max(maleCount, femaleCount, otherCount) * 4, // Adjust max value to fit all bars
+                            max: Math.max(maleCount, femaleCount, otherCount) * 4,
                             beginAtZero: true,
                         },
                     },

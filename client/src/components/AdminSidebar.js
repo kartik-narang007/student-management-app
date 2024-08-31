@@ -1,4 +1,3 @@
-// src/components/AdminSidebar.js
 import React from "react";
 import withSidebarNav from "./ReusableHOCs/withSidebarNav";
 import withSidebarTitle from "./ReusableHOCs/withSideBarTitle";
@@ -8,6 +7,8 @@ import {
     FaChalkboardTeacher,
     FaBookOpen,
     FaClipboardList,
+    FaUserShield,
+    FaUserCircle,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -42,6 +43,7 @@ const navItems = [
     { to: "/admin/create-class", label: "Create Class", icon: <FaBookOpen className="text-lg ml-10 mr-3" /> },
     { to: "/admin/class-list", label: "Class List", icon: <FaClipboardList className="text-lg ml-10 mr-3" /> },
     { to: "/admin/assign-teachers", label: "Assign Teachers", icon: <FaClipboardList className="text-lg ml-10 mr-3" /> },
+    { to: "/admin/profile", label: "Profile", icon: <FaUserCircle className="text-lg ml-10 mr-3" /> },
 ];
 
 const AdminSidebar = withSidebarTitle(withSidebarNav(AdminSidebarContent, navItems), "Admin Dashboard");

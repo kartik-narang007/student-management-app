@@ -11,7 +11,6 @@ const AdminManageTeachers = () => {
         refetchTeachers,
         handleApprove,
         handleDeactivate,
-        sortConfig,
     } = useTeacherData();
 
     const handleApproveClick = async (teacherId) => {
@@ -29,33 +28,27 @@ const AdminManageTeachers = () => {
         await refetchTeachers();
     };
 
+    // Update headers to include the new "Number of Classes" column
     const headers = [
         { key: "fullName", title: "Teacher Name", sortable: true },
         { key: "gender", title: "Gender", sortable: true },
         { key: "isApproved", title: "Approval Status", sortable: true },
+        { key: "numberOfClasses", title: "Number of Classes", sortable: true }, // New column
     ];
 
     const getActionButtons = (row) => {
-        const buttons = [];
-        if (!row.isApproved) {
-            buttons.push({
-                label: "Approve",
-                className: "bg-green-500 text-white px-3 py-1 rounded action-button",
-                action: () => handleApproveClick(row._id),
-            });
-        }
-        if (row.isApproved) {
-            buttons.push({
-                label: "Deactivate",
-                className: "bg-red-500 text-white px-3 py-1 rounded action-button",
-                action: () => handleDeactivateClick(row._id),
-            });
-        }
-        buttons.push({
-            label: "Delete",
-            className: "bg-red-600 text-white px-3 py-1 rounded action-button",
-            action: () => handleDeleteClick(row._id),
-        });
+        const buttons = [
+            {
+                label: row.isApproved ? "Deactivate" : "Approve",
+                className: row.isApproved ? "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" : "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600",
+                action: () => row.isApproved ? handleDeactivateClick(row._id) : handleApproveClick(row._id),
+            },
+            {
+                label: "Delete",
+                className: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700",
+                action: () => handleDeleteClick(row._id),
+            },
+        ];
         return buttons;
     };
 
@@ -63,10 +56,11 @@ const AdminManageTeachers = () => {
         if (key === "isApproved") {
             return row.isApproved ? "Approved" : "Not Approved";
         }
+        if (key === "numberOfClasses") {
+            return row.classes ? row.classes.length : 0; // Assuming classes is an array in the teacher data
+        }
         return row[key];
     };
-
-    const actionButtons = teachers.map((teacher) => getActionButtons(teacher));
 
     return (
         <div className="p-6 relative">
@@ -79,7 +73,7 @@ const AdminManageTeachers = () => {
                 rows={teachers}
                 onRowClick={(id) => navigate(`/teacher/${id}`)} // Example of row click handling
                 renderCell={renderCell}
-                actionButtons={actionButtons}
+                actionButtons={teachers.map(getActionButtons)}
                 rowKey="_id"
                 sortable={true}
             />

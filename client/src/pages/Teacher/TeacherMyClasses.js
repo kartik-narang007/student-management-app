@@ -1,7 +1,7 @@
 import React from "react";
 import useTeacherClasses from "../../hooks/useTeacherClasses";
 import { useAuth } from "../../context/authContext/AuthProvider";
-import Table from "../../components/ReusableTable"; // Adjust the path to where Table is located
+import Table from "../../components/ReusableTable";
 
 const TeacherMyClasses = () => {
     const {
@@ -48,9 +48,8 @@ const TeacherMyClasses = () => {
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold">My Classes</h1>
+            <h1 className="text-2xl font-bold mb-6">My Classes</h1>
 
-            {/* Main classes table */}
             <Table
                 headers={classHeaders}
                 rows={classes}
@@ -60,7 +59,6 @@ const TeacherMyClasses = () => {
                 sortable={true}
             />
 
-            {/* Separate tables for each class */}
             {classes.map((cls) => (
                 <div
                     key={cls.classId}
@@ -74,7 +72,7 @@ const TeacherMyClasses = () => {
                         headers={studentHeaders}
                         rows={cls.studentsList}
                         rowKey="id"
-                        sortable={true} // Enable sorting for student table
+                        sortable={true}
                         renderCell={renderStudentCell}
                     />
                 </div>
