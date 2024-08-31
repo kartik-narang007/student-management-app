@@ -7,7 +7,7 @@ const AdminLayout = () => {
     return (
         <div className="flex h-screen">
             <AdminSidebar />
-            <div className="flex-1 flex flex-col ml-[258px]">
+            <div className="flex-1 flex flex-col">
                 <AdminHeader />
                 <main className="flex-1 p-6 bg-gray-100 rounded-lg shadow-md">
                     <Outlet /> {/* This renders the child routes */}

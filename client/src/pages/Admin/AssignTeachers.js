@@ -97,18 +97,20 @@ const AssignTeachers = () => {
 
   return (
     <div className="flex flex-col space-y-4 p-4">
+      
       <div className="relative bg-white shadow-md rounded-md p-4">
+      <button
+              onClick={onSave}
+              className="absolute top-2 right-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Save Changes
+            </button>
         <h1 className="text-2xl font-bold mb-2">Classes</h1>
         {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
         
         <div className="overflow-x-auto">
-          <div className="relative">
-            <button
-              onClick={onSave}
-              className="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md"
-            >
-              Save Changes
-            </button>
+          <div>
+            
             <div className="h-[calc(100vh-290px)] overflow-y-auto max-h-[500px]">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
