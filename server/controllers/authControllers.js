@@ -8,6 +8,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const crypto = require("crypto");
 const Class = require("../models/Class");
 
+
+const URL = process.env.URL;
+
 function capitalizeWords(str) {
     if (!str) return "";
     return str
@@ -176,7 +179,7 @@ exports.forgotPassword = async (req, res) => {
         user.resetTokenExpiry = Date.now() + 600000;
         await user.save();
 
-        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+        const resetUrl = `${URL}/reset-password/${resetToken}`;
 
         await transporter.sendMail({
             to: user.email,

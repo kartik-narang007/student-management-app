@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 5000;
+const URL = process.env.URL;
 
 const authRoutes = require("./routes/authRoutes");
 const publicRoutes = require("./routes/publicRoutes");
@@ -16,7 +17,20 @@ const adminPaymentRoutes = require("./routes/adminRoutes/adminPaymentRoutes");
 const studentRoutes = require("./routes/studentRoutes/studentRoutes");
 const teacherRoutes = require("./routes/teacherRoutes/teacherRoutes");
 
-app.use(cors());
+const allowedOrigins = [
+    URL,
+    'http://localhost:3000'
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+}));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
