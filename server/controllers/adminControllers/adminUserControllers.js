@@ -12,6 +12,7 @@ exports.adminOverview = async (req, res) => {
             totalTeachers,
         });
     } catch (err) {
+        console.log(err);
         res.status(500).send(err);
     }
 };
