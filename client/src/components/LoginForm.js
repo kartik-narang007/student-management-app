@@ -19,7 +19,7 @@ const LoginForm = ({ errorMessage, setErrorMessage }) => {
     });
 
     return (
-        <div className="w-full bg-white shadow-lg rounded-lg p-28 max-w-xl mx-auto">
+        <div className="w-full bg-white shadow-lg rounded-lg max-w-lg px-20 py-20 mx-auto">
             <h2 className="text-3xl font-bold mb-6 text-center text-purple-600">
                 Login
             </h2>
@@ -80,10 +80,14 @@ const LoginForm = ({ errorMessage, setErrorMessage }) => {
 
                     <button
                         type="submit"
-                        className="w-full bg-purple-600 text-white py-3 cursor-pointer rounded-lg shadow-md hover:bg-purple-700 transition duration-200 text-sm"
+                        className="relative w-full bg-purple-600 text-white py-3 cursor-pointer rounded-lg shadow-md hover:bg-purple-700 transition duration-200 text-sm flex items-center justify-center"
                         disabled={isSubmitting}
                     >
-                        Login
+                        {isSubmitting ? (
+                            <div className="spinner"></div>
+                        ) : (
+                            "Login"
+                        )}
                     </button>
                 </Form>
             </Formik>

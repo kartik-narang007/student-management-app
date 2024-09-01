@@ -1,3 +1,4 @@
+// usePrepareAssignments.js
 import { useState, useEffect } from "react";
 import useFetchClasses from "./useFetchClasses";
 import useFetchTeachers from "./useFetchTeachers";
@@ -23,21 +24,21 @@ const usePrepareAssignments = () => {
 
       classes.forEach((classItem) => {
         updatedClassNameMap[classItem._id] = classItem.name;
-
-        updatedClassTeacherMap[classItem._id] = classItem.teachers.map(teacherId => ({
+        updatedClassTeacherMap[classItem._id] = classItem.teachers.map((teacherId) => ({
           id: teacherId,
-          name: teacherIdToNameMap[teacherId]
+          name: teacherIdToNameMap[teacherId],
         }));
       });
 
-      const updatedTeacherAssignments = teachers.reduce((acc, teacher) => {
-        acc[teacher._id] = 0;
-        return acc;
-      }, {});
+      // Initialize teacher assignments to 0
+      const initialTeacherAssignments = {};
+      teachers.forEach((teacher) => {
+        initialTeacherAssignments[teacher._id] = 0;
+      });
 
       setClassTeacherMap(updatedClassTeacherMap);
       setClassNameMap(updatedClassNameMap);
-      setTeacherAssignments(updatedTeacherAssignments);
+      setTeacherAssignments(initialTeacherAssignments);
     }
   }, [classes, teachers]);
 
@@ -46,12 +47,12 @@ const usePrepareAssignments = () => {
     classNameMap,
     setClassNameMap,
     teacherAssignments,
+    setTeacherAssignments,
     error,
     loading: loadingClasses || loadingTeachers,
     classesError,
     teachersError,
     teachers,
-    setTeacherAssignments
   };
 };
 

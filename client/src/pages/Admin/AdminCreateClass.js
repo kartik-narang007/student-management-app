@@ -18,13 +18,19 @@ const validationSchema = Yup.object({
 
 const AdminCreateClasses = () => {
     const [classes, setClasses] = useState([]);
+    const [saving, setSaving] = useState(false);
     const { createClass, statusMessage, isError, isSuccess } = useCreateClass();
 
     const handleAddClass = async (values, { resetForm }) => {
+        setSaving(true);
         try {
             const response = await createClass(values);
             if (response?.status === 201) {
-                setClasses(prevClasses => [...prevClasses, response.data.class]);
+                setClasses((prevClasses) => [
+                    ...prevClasses,
+                    response.data.class,
+                ]);
+                setSaving(false);
                 resetForm();
             }
         } catch (error) {
@@ -40,7 +46,9 @@ const AdminCreateClasses = () => {
                 <h3 className="text-xl font-semibold mb-3">Add New Class</h3>
 
                 {statusMessage && (
-                    <div className={`text-${isError ? "red" : "green"}-500 mb-4`}>
+                    <div
+                        className={`text-${isError ? "red" : "green"}-500 mb-4`}
+                    >
                         {statusMessage}
                     </div>
                 )}
@@ -129,7 +137,11 @@ const AdminCreateClasses = () => {
                                 type="submit"
                                 className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
                             >
-                                Add Class
+                                {saving ? (
+                                    <div className="spinner border-t-transparent border-white mx-auto"></div>
+                                ) : (
+                                    "Add Class"
+                                )}
                             </button>
                         </Form>
                     )}

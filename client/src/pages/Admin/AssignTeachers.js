@@ -22,6 +22,8 @@ const AssignTeachers = () => {
 
   const [assignments, setAssignments] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     if (classTeacherMap) {
@@ -38,37 +40,60 @@ const AssignTeachers = () => {
   }, [classTeacherMap]);
 
   const handleDropdownChange = (classId, slotIndex, teacherId) => {
-    if (teacherId && (teacherAssignments[teacherId] || 0) >= 7) {
+    const currentTeacherId = assignments[`${classId}-${slotIndex}`];
+  
+    let currentTeacherCount = 0;
+    let newTeacherCount = 0;
+  
+    if (currentTeacherId) {
+      currentTeacherCount = Object.values(assignments).filter(id => id === currentTeacherId).length;
+    }
+    
+    if (teacherId) {
+      newTeacherCount = Object.values(assignments).filter(id => id === teacherId).length;
+    }
+  
+    if (teacherId && newTeacherCount >= 7) {
       setErrorMessage("This teacher is already assigned to 7 classes.");
       setTimeout(() => setErrorMessage(""), 3000);
       return;
     }
-
+  
+    setTeacherAssignments((prevAssignments) => {
+      const updatedAssignments = { ...prevAssignments };
+  
+      if (currentTeacherId && currentTeacherId !== teacherId) {
+        updatedAssignments[currentTeacherId] = Math.max((updatedAssignments[currentTeacherId] || 1) - 1, 0);
+      }
+  
+      if (teacherId) {
+        updatedAssignments[teacherId] = (updatedAssignments[teacherId] || 0) + 1;
+      }
+  
+      return updatedAssignments;
+    });
+  
     setAssignments((prevAssignments) => ({
       ...prevAssignments,
       [`${classId}-${slotIndex}`]: teacherId
     }));
-
-    setTeacherAssignments((prevAssignments) => {
-      const updatedTeacherAssignments = { ...prevAssignments };
-      if (teacherId) {
-        updatedTeacherAssignments[teacherId] = (updatedTeacherAssignments[teacherId] || 0) + 1;
-      }
-      return updatedTeacherAssignments;
-    });
-
+  
     setErrorMessage("");
   };
 
   const handleUnassignClick = (classId, slotIndex) => {
     const currentTeacherId = assignments[`${classId}-${slotIndex}`];
+  
     if (currentTeacherId) {
       setTeacherAssignments((prevAssignments) => {
-        const updatedTeacherAssignments = { ...prevAssignments };
-        updatedTeacherAssignments[currentTeacherId] = Math.max((updatedTeacherAssignments[currentTeacherId] || 1) - 1, 0);
-        return updatedTeacherAssignments;
+        const updatedAssignments = { ...prevAssignments };
+  
+        updatedAssignments[currentTeacherId] = Math.max((updatedAssignments[currentTeacherId] || 1) - 1, 0);
+  
+        return updatedAssignments;
       });
     }
+  
     setAssignments((prevAssignments) => ({
       ...prevAssignments,
       [`${classId}-${slotIndex}`]: ""
@@ -76,12 +101,16 @@ const AssignTeachers = () => {
   };
 
   const onSave = async () => {
+    setSaving(true);
+    setNotification(""); // Clear previous notifications
     try {
       await handleSave(assignments, token);
-      alert("Changes saved successfully!");
+      setNotification("Changes saved successfully!");
     } catch (error) {
-      console.error("Error saving changes:", error);
-      alert("Error saving changes.");
+      setNotification("Error saving changes.");
+    } finally {
+      setSaving(false);
+      setTimeout(() => setNotification(""), 2000); // Hide notification after 2 seconds
     }
   };
 
@@ -103,7 +132,7 @@ const AssignTeachers = () => {
           options={teachers}
           selectedValue={assignments[`${classId}-${slotIndex}`] || ""}
           onChange={(e) => handleDropdownChange(classId, slotIndex, e.target.value)}
-          warning=""
+          warning="" // No warning in Dropdown component
           style={{ width: "200px" }}
         />
       </td>
@@ -123,14 +152,25 @@ const AssignTeachers = () => {
   return (
     <div className="flex flex-col space-y-4 p-4">
       <div className="relative bg-white shadow-md rounded-md p-4">
+        {saving && (
+          <div className="absolute top-2 right-4 flex items-center space-x-2">
+            <span className="text-blue-500">Saving...</span>
+          </div>
+        )}
         <button
           onClick={onSave}
-          className="absolute top-2 right-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="absolute top-2 right-4 bg-blue-500 text-white px-4 py-2 rounded-md flex items-center justify-center"
           aria-label="Save changes"
+          disabled={saving}
         >
-          Save Changes
+          {saving ? (
+            <div className="spinner border-t-transparent border-white mx-auto"></div>
+          ) : (
+            "Save Changes"
+          )}
         </button>
         <h1 className="text-2xl font-bold mb-2">Classes</h1>
+        {notification && <div className="text-blue-500 mb-4">{notification}</div>}
         {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
         <div className="overflow-x-auto">
           <div className="h-[calc(100vh-290px)] overflow-y-auto max-h-[500px]">

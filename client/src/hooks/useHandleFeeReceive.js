@@ -11,6 +11,7 @@ const useHandleFeeReceive = () => {
         receiptDate: "",
     });
     const [successMessage, setSuccessMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false); // New state for tracking submission
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,12 +20,11 @@ const useHandleFeeReceive = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true); // Start spinner
         const amountNumber = parseFloat(formData.amountReceived);
 
-
         try {
-            await axios.post(FEE_RECEIVE, {...formData,
-            amountReceived:amountNumber}, {
+            await axios.post(FEE_RECEIVE, { ...formData, amountReceived: amountNumber }, {
                 headers: {
                     Authorization: `${state?.token}`,
                 },
@@ -33,6 +33,8 @@ const useHandleFeeReceive = () => {
             setFormData({ student: "", amountReceived: "", receiptDate: "" });
         } catch (error) {
             setSuccessMessage(`Failed to process fee receipt: ${error.message}`);
+        } finally {
+            setIsSubmitting(false); // Stop spinner
         }
     };
 
@@ -42,6 +44,7 @@ const useHandleFeeReceive = () => {
         formData,
         setFormData,
         successMessage,
+        isSubmitting, // Return spinner state
     };
 };
 

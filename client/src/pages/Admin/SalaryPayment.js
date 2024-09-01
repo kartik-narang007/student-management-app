@@ -4,7 +4,7 @@ import useHandleSalaryPayment from "../../hooks/useHandleSalaryPayment";
 
 const SalaryPaymentPage = () => {
     const { teachers } = useFetchTeachers();
-    const { handleSubmit, handleChange, formData, setFormData, successMessage } =
+    const { handleSubmit, handleChange, formData, setFormData, successMessage, loading } =
         useHandleSalaryPayment();
     const [selectedTeacher, setSelectedTeacher] = useState("");
     const [message, setMessage] = useState("");
@@ -99,8 +99,32 @@ const SalaryPaymentPage = () => {
                 <button
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    disabled={loading}  // Disable button while loading
                 >
-                    Submit Salary Payment
+                    {loading ? (
+                        <svg
+                            className="animate-spin h-5 w-5 text-white inline-block"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zM2 16.929A10.934 10.934 0 011.071 12H0c0 3.042 1.135 5.824 3 7.929l1-1z"
+                            ></path>
+                        </svg>
+                    ) : (
+                        "Submit Salary Payment"
+                    )}
                 </button>
             </form>
         </main>

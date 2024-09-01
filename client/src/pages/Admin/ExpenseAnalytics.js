@@ -81,38 +81,32 @@ const ExpenseAnalytics = () => {
     };
 
     const chartData = {
-        labels: Object.keys(data.feeReceives || {}),
+        labels: Object.keys(data.feeReceives || {}).sort((a, b) => new Date(a) - new Date(b)),
         datasets: [
             {
                 label: "Salary Paid",
-                data: Object.values(data.salaryPayments || {}),
+                data: Object.keys(data.salaryPayments || {}).sort((a, b) => new Date(a) - new Date(b)).map(label => data.salaryPayments[label]),
                 fill: false,
                 borderColor: "rgba(255, 99, 132, 1)",
                 backgroundColor: "rgba(255, 99, 132, 0.2)",
             },
             {
                 label: "Income Received",
-                data: Object.values(data.feeReceives || {}),
+                data: Object.keys(data.feeReceives || {}).sort((a, b) => new Date(a) - new Date(b)).map(label => data.feeReceives[label]),
                 fill: false,
                 borderColor: "rgba(54, 162, 235, 1)",
                 backgroundColor: "rgba(54, 162, 235, 0.2)",
             },
             {
                 label: "Net Income",
-                data: calculateNetIncome(),
+                data: calculateNetIncome().sort((a, b) => new Date(a) - new Date(b)),
                 fill: false,
                 borderColor: "rgba(75, 192, 192, 1)",
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
             },
-            {
-                label: "Net Loss",
-                data: calculateNetLoss(),
-                fill: false,
-                borderColor: "rgba(255, 159, 64, 1)",
-                backgroundColor: "rgba(255, 159, 64, 0.2)",
-            },
         ],
     };
+    
 
     const chartOptions = {
         responsive: true,

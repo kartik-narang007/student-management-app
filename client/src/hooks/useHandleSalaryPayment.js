@@ -12,6 +12,7 @@ const useHandleSalaryPayment = () => {
         assignedSalary: "",
     });
     const [successMessage, setSuccessMessage] = useState("");
+    const [loading, setLoading] = useState(false);  // Added loading state
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,7 +21,6 @@ const useHandleSalaryPayment = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const amountNumber = parseFloat(formData.amount);
 
         if (isNaN(amountNumber)) {
@@ -28,6 +28,7 @@ const useHandleSalaryPayment = () => {
             return;
         }
 
+        setLoading(true);  // Set loading to true before the submission starts
         try {
             await axios.post(SALARY_PAYMENT, {
                 ...formData,
@@ -41,10 +42,12 @@ const useHandleSalaryPayment = () => {
             setFormData({ teacher: "", amount: "", date: "", assignedSalary: "" });
         } catch (error) {
             setSuccessMessage(`Failed to process salary payment: ${error.message}`);
+        } finally {
+            setLoading(false);  // Set loading to false after the submission is complete
         }
     };
 
-    return { handleSubmit, handleChange, formData, setFormData, successMessage };
+    return { handleSubmit, handleChange, formData, setFormData, successMessage, loading };  // Return loading state
 };
 
 export default useHandleSalaryPayment;

@@ -177,7 +177,7 @@ exports.forgotPassword = async (req, res) => {
         user.resetTokenExpiry = Date.now() + 600000;
         await user.save();
 
-        const resetUrl = `${FRONTEND_URL}/${resetToken}`;
+        const resetUrl = `${FRONTEND_URL}/reset-password/${resetToken}`;
 
         await transporter.sendMail({
             to: user.email,
