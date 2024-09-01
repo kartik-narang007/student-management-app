@@ -15,32 +15,32 @@ const TeacherMyClasses = () => {
     if (error) return <p>Error: {error}</p>;
 
     const classHeaders = [
-        { key: 'name', title: 'Class Name', sortable: true },
-        { key: 'totalStudents', title: 'Total Students', sortable: true },
-        { key: 'maleStudents', title: 'Male Students', sortable: true },
-        { key: 'femaleStudents', title: 'Female Students', sortable: true },
-        { key: 'otherStudents', title: 'Other Students', sortable: true }
+        { key: "name", title: "Class Name", sortable: true },
+        { key: "totalStudents", title: "Total Students", sortable: true },
+        { key: "maleStudents", title: "Male Students", sortable: true },
+        { key: "femaleStudents", title: "Female Students", sortable: true },
+        { key: "otherStudents", title: "Other Students", sortable: true },
     ];
 
     const studentHeaders = [
-        { key: 'name', title: 'Name', sortable: true },
-        { key: 'gender', title: 'Gender', sortable: true },
-        { key: 'parentName', title: 'Parent Name', sortable: true }
+        { key: "name", title: "Name", sortable: true },
+        { key: "gender", title: "Gender", sortable: true },
+        { key: "parentName", title: "Parent Name", sortable: true },
     ];
 
     const getActionButtons = (row) => [
         {
-            label: 'View',
-            className: 'text-blue-500 underline',
+            label: "View",
+            className: "text-blue-500 underline",
             action: () => {
                 const element = document.getElementById(`students-table-${row.classId}`);
                 if (element) element.classList.toggle("hidden");
-            }
-        }
+            },
+        },
     ];
 
     const renderClassCell = (key, row) => {
-        if (key === 'otherStudents') return row[key] || 0;
+        if (key === "otherStudents") return row[key] || 0;
         return row[key];
     };
 
@@ -54,7 +54,7 @@ const TeacherMyClasses = () => {
                 headers={classHeaders}
                 rows={classes}
                 rowKey="classId"
-                actionButtons={classes.map(getActionButtons)}
+                actionButtons={getActionButtons} // Pass function for actionButtons
                 renderCell={renderClassCell}
                 sortable={true}
             />

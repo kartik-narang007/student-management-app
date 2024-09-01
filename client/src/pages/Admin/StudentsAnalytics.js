@@ -13,12 +13,12 @@ const StudentsAnalytics = () => {
     if (error) return <div>Error loading student data</div>;
 
     const headers = [
-        { title: "Student Name", key: "name" },
-        { title: "Parent Name", key: "parentName" },
-        { title: "DOB", key: "dob" },
-        { title: "Class", key: "class" },
-        { title: "Gender", key: "gender" },
-        { title: "Fees Received", key: "feesReceived" },
+        { title: "Student Name", key: "name", sortable: true },
+        { title: "Parent Name", key: "parentName",sortable: true },
+        { title: "DOB", key: "dob",sortable: true },
+        { title: "Class", key: "class",sortable: true },
+        { title: "Gender", key: "gender",sortable: true },
+        { title: "Fees Received", key: "feesReceived",sortable: true },
     ];
 
     const handleRowClick = (studentId) => {
@@ -43,6 +43,7 @@ const StudentsAnalytics = () => {
                             headers={headers}
                             rows={students?.students || []}
                             rowKey="_id"
+                            sortable={true}
                             onRowClick={handleRowClick}
                         />
                     </div>

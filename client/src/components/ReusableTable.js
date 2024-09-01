@@ -7,7 +7,7 @@ const Table = ({
     rowKey,
     sortable = false,
     renderCell,
-    actionButtons,
+    actionButtons, // This can be a function or undefined
 }) => {
     const [sortConfig, setSortConfig] = useState({
         key: null,
@@ -50,6 +50,9 @@ const Table = ({
         return sortableRows;
     }, [rows, sortConfig]);
 
+    // Determine if the table should have an action column
+    const hasActionButtons = actionButtons && typeof actionButtons === "function";
+
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300 divide-y divide-gray-200">
@@ -73,15 +76,14 @@ const Table = ({
                                         : " ↓")}
                             </th>
                         ))}
-                        {actionButtons && (
+                        {hasActionButtons && (
                             <th className="py-2 px-4 text-center">Actions</th>
                         )}
                     </tr>
                 </thead>
                 <tbody>
                     {sortedRows.map((row, index) => {
-                        const actions = actionButtons(row);
-
+                        const actions = hasActionButtons ? actionButtons(row) : [];
                         return (
                             <tr
                                 key={row[rowKey]}
@@ -104,7 +106,7 @@ const Table = ({
                                             : row[header.key]}
                                     </td>
                                 ))}
-                                {actions && actions.length > 0 && (
+                                {hasActionButtons && actions.length > 0 && (
                                     <td className="py-2 px-4 text-center">
                                         {actions.map((button, j) => (
                                             <button
@@ -112,7 +114,17 @@ const Table = ({
                                                 className={button.className}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    button.action();
+                                                    if (
+                                                        typeof button.action ===
+                                                        "function"
+                                                    ) {
+                                                        button.action();
+                                                    } else {
+                                                        console.error(
+                                                            "button.action is not a function",
+                                                            button.action
+                                                        );
+                                                    }
                                                 }}
                                             >
                                                 {button.label}
