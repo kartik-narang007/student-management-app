@@ -37,7 +37,7 @@ const AdminManageStudents = () => {
 
     const getActionButtons = (row) => {
         const buttons = [];
-    
+
         if (!row.isApproved) {
             buttons.push({
                 label: "Approve",
@@ -51,16 +51,15 @@ const AdminManageStudents = () => {
                 action: () => handleDeactivateClick(row._id),
             });
         }
-    
+
         buttons.push({
             label: "Delete",
             className: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700", 
             action: () => handleDeleteClick(row._id),
         });
-    
+
         return buttons;
     };
-    
 
     const renderCell = (key, row) => {
         if (key === "isApproved") {
@@ -79,7 +78,7 @@ const AdminManageStudents = () => {
                 rows={students}
                 onRowClick={(id) => navigate(`/student/${id}`)} // Example of row click handling
                 renderCell={renderCell}
-                actionButtons={students.map(getActionButtons)}
+                actionButtons={(row) => getActionButtons(row)} // Corrected to pass function
                 rowKey="_id"
                 sortable={true}
             />

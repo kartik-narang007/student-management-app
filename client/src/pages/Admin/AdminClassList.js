@@ -36,7 +36,6 @@ const AdminClassList = () => {
         ];
     };
 
-
     if (loading || deleteLoading) return <p>Loading...</p>;
     if (error || deleteError) return <p>Error: {error || deleteError}</p>;
 
@@ -48,7 +47,7 @@ const AdminClassList = () => {
                 headers={headers}
                 rows={classes}
                 rowKey="_id"
-                actionButtons={(row) => getActionButtons(row)} // Ensure actionButtons function is passed correctly
+                actionButtons={(row) => getActionButtons(row)} // Corrected to pass function
                 renderCell={(key, row) => {
                     if (key === "students" || key === "teachers") {
                         return row[key]?.length || 0;

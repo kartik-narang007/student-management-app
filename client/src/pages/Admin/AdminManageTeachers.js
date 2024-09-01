@@ -28,7 +28,6 @@ const AdminManageTeachers = () => {
         await refetchTeachers();
     };
 
-    
     const headers = [
         { key: "fullName", title: "Teacher Name", sortable: true },
         { key: "gender", title: "Gender", sortable: true },
@@ -40,8 +39,10 @@ const AdminManageTeachers = () => {
         const buttons = [
             {
                 label: row.isApproved ? "Deactivate" : "Approve",
-                className: row.isApproved ? "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2" : "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2",
-                action: () => row.isApproved ? handleDeactivateClick(row._id) : handleApproveClick(row._id),
+                className: row.isApproved
+                    ? "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2"
+                    : "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2",
+                action: () => (row.isApproved ? handleDeactivateClick(row._id) : handleApproveClick(row._id)),
             },
             {
                 label: "Delete",
@@ -57,7 +58,7 @@ const AdminManageTeachers = () => {
             return row.isApproved ? "Approved" : "Not Approved";
         }
         if (key === "numberOfClasses") {
-            return row.classes ? row.classes.length : 0; 
+            return row.classes ? row.classes.length : 0;
         }
         return row[key];
     };
@@ -71,9 +72,9 @@ const AdminManageTeachers = () => {
             <Table
                 headers={headers}
                 rows={teachers}
-                onRowClick={(id) => navigate(`/teacher/${id}`)} 
+                onRowClick={(id) => navigate(`/teacher/${id}`)}
                 renderCell={renderCell}
-                actionButtons={teachers.map(getActionButtons)}
+                actionButtons={(row) => getActionButtons(row)} // Updated to pass as a function
                 rowKey="_id"
                 sortable={true}
             />

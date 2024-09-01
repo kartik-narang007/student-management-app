@@ -73,14 +73,15 @@ const Table = ({
                                         : " ↓")}
                             </th>
                         ))}
-                        {actionButtons && actionButtons.length > 0 && (
+                        {actionButtons && (
                             <th className="py-2 px-4 text-center">Actions</th>
                         )}
                     </tr>
                 </thead>
                 <tbody>
                     {sortedRows.map((row, index) => {
-                        const actions = actionButtons ? actionButtons(row) : [];
+                        const actions = actionButtons(row);
+
                         return (
                             <tr
                                 key={row[rowKey]}
@@ -111,8 +112,7 @@ const Table = ({
                                                 className={button.className}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    button.action &&
-                                                        button.action();
+                                                    button.action();
                                                 }}
                                             >
                                                 {button.label}
