@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const URL = process.env.URL;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const authRoutes = require("./routes/authRoutes");
 const publicRoutes = require("./routes/publicRoutes");
@@ -18,7 +19,7 @@ const studentRoutes = require("./routes/studentRoutes/studentRoutes");
 const teacherRoutes = require("./routes/teacherRoutes/teacherRoutes");
 
 const allowedOrigins = [
-    URL,
+    FRONTEND_URL,
     'http://localhost:3000'
 ];
 

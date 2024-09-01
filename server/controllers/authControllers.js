@@ -7,9 +7,7 @@ const nodemailer = require("nodemailer");
 const JWT_SECRET = process.env.JWT_SECRET;
 const crypto = require("crypto");
 const Class = require("../models/Class");
-
-
-const URL = process.env.URL;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 function capitalizeWords(str) {
     if (!str) return "";
@@ -179,7 +177,7 @@ exports.forgotPassword = async (req, res) => {
         user.resetTokenExpiry = Date.now() + 600000;
         await user.save();
 
-        const resetUrl = `${URL}/reset-password/${resetToken}`;
+        const resetUrl = `${FRONTEND_URL}/${resetToken}`;
 
         await transporter.sendMail({
             to: user.email,
