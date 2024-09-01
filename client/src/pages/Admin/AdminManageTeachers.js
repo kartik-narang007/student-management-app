@@ -28,19 +28,19 @@ const AdminManageTeachers = () => {
         await refetchTeachers();
     };
 
-    // Update headers to include the new "Number of Classes" column
+    
     const headers = [
         { key: "fullName", title: "Teacher Name", sortable: true },
         { key: "gender", title: "Gender", sortable: true },
         { key: "isApproved", title: "Approval Status", sortable: true },
-        { key: "numberOfClasses", title: "Number of Classes", sortable: true }, // New column
+        { key: "numberOfClasses", title: "Number of Classes", sortable: true }, 
     ];
 
     const getActionButtons = (row) => {
         const buttons = [
             {
                 label: row.isApproved ? "Deactivate" : "Approve",
-                className: row.isApproved ? "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" : "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600",
+                className: row.isApproved ? "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2" : "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2",
                 action: () => row.isApproved ? handleDeactivateClick(row._id) : handleApproveClick(row._id),
             },
             {
@@ -57,7 +57,7 @@ const AdminManageTeachers = () => {
             return row.isApproved ? "Approved" : "Not Approved";
         }
         if (key === "numberOfClasses") {
-            return row.classes ? row.classes.length : 0; // Assuming classes is an array in the teacher data
+            return row.classes ? row.classes.length : 0; 
         }
         return row[key];
     };
@@ -71,7 +71,7 @@ const AdminManageTeachers = () => {
             <Table
                 headers={headers}
                 rows={teachers}
-                onRowClick={(id) => navigate(`/teacher/${id}`)} // Example of row click handling
+                onRowClick={(id) => navigate(`/teacher/${id}`)} 
                 renderCell={renderCell}
                 actionButtons={teachers.map(getActionButtons)}
                 rowKey="_id"

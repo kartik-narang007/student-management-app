@@ -37,29 +37,30 @@ const AdminManageStudents = () => {
 
     const getActionButtons = (row) => {
         const buttons = [];
-
+    
         if (!row.isApproved) {
             buttons.push({
                 label: "Approve",
-                className: "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600",
+                className: "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2", 
                 action: () => handleApproveClick(row._id),
             });
         } else {
             buttons.push({
                 label: "Deactivate",
-                className: "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600",
+                className: "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 mr-2", 
                 action: () => handleDeactivateClick(row._id),
             });
         }
-
+    
         buttons.push({
             label: "Delete",
-            className: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700",
+            className: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700", 
             action: () => handleDeleteClick(row._id),
         });
-
+    
         return buttons;
     };
+    
 
     const renderCell = (key, row) => {
         if (key === "isApproved") {
