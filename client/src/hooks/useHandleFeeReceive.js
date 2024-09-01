@@ -19,8 +19,12 @@ const useHandleFeeReceive = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const amountNumber = parseFloat(formData.amountReceived);
+
+
         try {
-            await axios.post(FEE_RECEIVE, formData, {
+            await axios.post(FEE_RECEIVE, {...formData,
+            amountReceived:amountNumber}, {
                 headers: {
                     Authorization: `${state?.token}`,
                 },
