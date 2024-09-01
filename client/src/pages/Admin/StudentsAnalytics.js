@@ -13,18 +13,19 @@ const StudentsAnalytics = () => {
     if (error) return <div>Error loading student data</div>;
 
     const headers = [
-        { title: 'Student Name', key: 'name' },
-        { title: 'Parent Name', key: 'parentName' },
-        { title: 'DOB', key: 'dob' },
-        { title: 'Class', key: 'class' },
-        { title: 'Gender', key: 'gender' },
-        { title: 'Fees Received', key: 'feesReceived' },
+        { title: "Student Name", key: "name" },
+        { title: "Parent Name", key: "parentName" },
+        { title: "DOB", key: "dob" },
+        { title: "Class", key: "class" },
+        { title: "Gender", key: "gender" },
+        { title: "Fees Received", key: "feesReceived" },
     ];
 
     const handleRowClick = (studentId) => {
         navigate(`/students/${studentId}`);
     };
 
+    const { Male, Female, Other } = students?.genderDistribution;
     return (
         <div className="flex flex-col">
             {/* Circular Back Button */}
@@ -59,7 +60,11 @@ const StudentsAnalytics = () => {
                             Female
                         </div>
                     </div>
-                    <GenderDistributionChart students={students?.students} />
+                    <GenderDistributionChart
+                        maleCount={Male}
+                        femaleCount={Female}
+                        otherCount={Other}
+                    />
                 </div>
             </div>
         </div>

@@ -20,6 +20,10 @@ ChartJS.register(
 );
 
 const GenderDistributionChart = ({ maleCount, femaleCount, otherCount }) => {
+    maleCount = maleCount || 0;
+    femaleCount = femaleCount || 0;
+    otherCount = otherCount || 0;
+
     const totalStudents = maleCount + femaleCount + otherCount;
 
     const genderDistribution = {
@@ -45,7 +49,10 @@ const GenderDistributionChart = ({ maleCount, femaleCount, otherCount }) => {
     };
 
     return (
-        <div className="flex flex-col items-center" style={{ width: '100%', height: '500px' }}>
+        <div
+            className="flex flex-col items-center"
+            style={{ width: "100%", height: "500px" }}
+        >
             <Bar
                 data={genderDistribution}
                 options={{
@@ -84,7 +91,9 @@ const GenderDistributionChart = ({ maleCount, femaleCount, otherCount }) => {
                                 display: true,
                                 text: "Count",
                             },
-                            max: Math.max(maleCount, femaleCount, otherCount) * 4,
+                            max:
+                                Math.max(maleCount, femaleCount, otherCount) *
+                                4,
                             beginAtZero: true,
                         },
                     },
