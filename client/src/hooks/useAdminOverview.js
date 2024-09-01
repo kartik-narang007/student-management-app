@@ -20,7 +20,9 @@ const useAdminOverview = () => {
                         Authorization: `${state.token}`,
                     },
                 });
-                if (response.statusText !== "OK") {
+
+                console.log(response);
+                if (!response.data) {
                     throw new Error("Failed to fetch overview data");
                 }
                 setOverviewData(response.data);
